@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/Overview/overview_page.dart';
+import 'package:myapp/screens/Overview/overview_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   String _title = "";
 
-  int showPercentages = 0;
+  bool showPercentages = true;
 
   /* 
   Aquí van las páginas. Estan puestas todos como overview pq salia error si estan vacias.
@@ -53,9 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   void _toggleView() {
     setState(() {
-      print(showPercentages);
-      showPercentages++;
-      print(showPercentages);
+      showPercentages = !showPercentages;
     });
   }
 
@@ -136,7 +134,10 @@ class _HomePageState extends State<HomePage> {
         //actions: [],
       body: Container(
         color: Color(0xFFEBEDF0),
-        child: _buildBody(),
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child:  _buildBody()
+        ),
       ),
       bottomNavigationBar: _bottomNavigation(),
     );
