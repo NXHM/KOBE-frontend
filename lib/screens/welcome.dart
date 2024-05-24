@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/constants/colors.dart';
 
 class WelcomeScreen extends StatelessWidget{
   const WelcomeScreen({super.key});
@@ -22,7 +21,7 @@ class WelcomeScreen extends StatelessWidget{
             ),
           ),
           const SafeArea(
-            child: Text("Welcome nigga")
+            child: Text("Welcome Andrea God")
             )
 
         ]
