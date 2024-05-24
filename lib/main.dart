@@ -16,6 +16,7 @@ void main() => runApp(
       '/signin': (context) => SignIn(),
       '/forgetPassword': (context) => ForgetPassword(),
       '/login': (context) => LogIn(),
+      '/home':(context) => HomePage(),
     },
   )
 );

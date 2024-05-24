@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/colors.dart';
+import 'package:myapp/screens/Home/home_page.dart';
 import '../../controllers/singInController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/signin/forgetPassword.dart';
@@ -100,7 +101,11 @@ class SignIn extends StatelessWidget {
             signInController.updateUserPassword(_passwordController.text);
             signInController.signIn();
             if (signInController.statusMessage.value == 'Sign-in successful') {
-              Get.toNamed('/home'); // Navigate to the home page
+              //Get.toNamed('/home'); // Navigate to the home page
+              Navigator.pushReplacement(
+            context,
+            MaterialPageRoute<void>(builder: (context) => HomePage() )
+          );
             }
   
           } else {

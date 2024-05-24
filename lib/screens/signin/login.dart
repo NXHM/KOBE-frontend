@@ -147,7 +147,7 @@ class LogIn extends StatelessWidget {
           _emailController.text.isNotEmpty &&
           _repeatPasswordController.text.isNotEmpty) {
             ;
-            if (loginInController.statusMessage.value == 'Login successful') {
+            if (loginInController.statusMessage.value == 'Sign-in successful') {
               Get.toNamed('/home'); // Navigate to the home page
             }
   
