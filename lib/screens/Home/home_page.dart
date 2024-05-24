@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/Overview/overview_page.dart';
+import 'package:myapp/screens/IngresarMovimientos/ingresar_movimientos_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         return overviewPage(showPercentages: showPercentages,);
       case 2:
         _title = "Ingresar Movimiento";
-        return overviewPage(showPercentages: showPercentages,);
+        return ingresar_movimientos_page();
       case 3:
         _title = "Historial";
         return overviewPage(showPercentages: showPercentages,);
