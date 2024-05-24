@@ -44,13 +44,13 @@ class LogInController extends GetxController {
       const hardcodedPassword = '123456';
       const hardcodedname = "Nico God";
       const hardcodedemail = "nicogod@gmail.com";
-      if (username == hardcodedusername && password == hardcodedPassword) {
-        statusMessage.value = 'Sign-in successful';
-      } else {
-        statusMessage.value = 'Invalid username or password';
-      }
+      // Ta harcodeado porque cuando se haga back:v se borrara esto
+      statusMessage.value = 'Log-in successful';
+      
+      //statusMessage.value = 'Invalid username or password';
+      
     } else {
-      statusMessage.value = 'Please enter both username and password';
+      statusMessage.value = 'Please enter all the require information';
     }
   }
 }
