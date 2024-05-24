@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CambioCorreo extends StatelessWidget {
-  const CambioCorreo({super.key});
+class CambioContrasena extends StatelessWidget {
+  const CambioContrasena({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class CambioCorreo extends StatelessWidget {
         children: [
           // # Texto Título
           const Text(
-            'Cambio de correo.',
+            'Nueva contraseña',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -27,28 +27,58 @@ class CambioCorreo extends StatelessWidget {
           Container(
             margin: const EdgeInsets.fromLTRB(0, 25, 0, 0),
             child: const Text(
-              'Debe ingresar el nuevo correo a ser vinculado con esta cuenta.',
+              'Al crear su nueva contraseña, esta debe ser diferente de su contraseña anterior.',
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
           ),
-          // # Contenedor Correo
+          // # Contenedor Contraseña
           Container(
             width: double.infinity,
-            margin: const EdgeInsets.fromLTRB(0, 68, 0, 0),
+            margin: const EdgeInsets.fromLTRB(0, 38, 0, 0),
             padding: const EdgeInsets.all(22),
             decoration: BoxDecoration(
               color: const Color(0xFFF0F2F4),
               borderRadius: BorderRadius.circular(15),
             ),
             child: const Text(
-              'Nuevo correo electrónico',
+              'Contraseña',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
+          // # Contenedor Confirmar contraseña
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.fromLTRB(0, 26, 0, 0),
+            padding: const EdgeInsets.all(22),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF0F2F4),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: const Text(
+              'Confirmar contraseña',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 27, 0, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Debe tener al menos 8 caracteres.'
+                ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                  child: const Text(
+                    'Contiene al menos un número.'
+                  ),
+                )
+            ],)
+          ),
           const Spacer(),
-          // # Botón Guardar cambios
+          // # Botón Cambiar correo
           Container(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -60,7 +90,7 @@ class CambioCorreo extends StatelessWidget {
                 minimumSize: const Size(double.infinity, 45)
               ),
               onPressed: () {},
-              child: const Text('Cambiar correo'),
+              child: const Text('Cambiar contraseña'),
             ),
           ),
         ],

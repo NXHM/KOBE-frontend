@@ -78,7 +78,7 @@ class EditarPerfil extends StatelessWidget {
                   minimumSize: const Size(double.infinity, 45)
                 ),
                 onPressed: () {},
-                child: const Text('Cambiar contraseña'),
+                child: const Text('Guardar cambios'),
               ),
             ),
           ],

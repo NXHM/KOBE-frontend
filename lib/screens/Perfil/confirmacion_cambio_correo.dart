@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CambioCorreo extends StatelessWidget {
-  const CambioCorreo({super.key});
+class ConfirmacionCambioCorreo extends StatelessWidget {
+  const ConfirmacionCambioCorreo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class CambioCorreo extends StatelessWidget {
         children: [
           // # Texto Título
           const Text(
-            'Cambio de correo.',
+            'Correo modificado.',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -27,24 +27,10 @@ class CambioCorreo extends StatelessWidget {
           Container(
             margin: const EdgeInsets.fromLTRB(0, 25, 0, 0),
             child: const Text(
-              'Debe ingresar el nuevo correo a ser vinculado con esta cuenta.',
+              'Se ha modificado su correo y ha sido vinculado con su cuenta de manera exitosa.',
               style: TextStyle(
                 fontSize: 20,
               ),
-            ),
-          ),
-          // # Contenedor Correo
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.fromLTRB(0, 68, 0, 0),
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF0F2F4),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: const Text(
-              'Nuevo correo electrónico',
-              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           const Spacer(),
@@ -60,7 +46,7 @@ class CambioCorreo extends StatelessWidget {
                 minimumSize: const Size(double.infinity, 45)
               ),
               onPressed: () {},
-              child: const Text('Cambiar correo'),
+              child: const Text('Aceptar'),
             ),
           ),
         ],
