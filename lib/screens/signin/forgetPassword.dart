@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/icons.dart';
 import 'package:myapp/constants/colors.dart';
+import 'package:myapp/screens/signin/enterCode.dart';
+import 'package:myapp/screens/signin/signIn.dart';
 import '../../controllers/forgetPasswordController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/widgets/description.dart';
@@ -19,8 +21,11 @@ class ForgetPassword extends StatelessWidget {
         leading: IconButton(
           icon: TDIcons.backArrow, 
            // Assuming TDIcons.backArrow is an IconData
-          onPressed: () {
-            Get.toNamed('/signIn');
+          onPressed: () { // Regresar a Sign In
+            //Get.toNamed('/signIn');
+            Navigator.pop(
+            context);
+          
           },
         ),
         //title: const Text('Recuperar Contraseña'),
@@ -85,6 +90,10 @@ class ForgetPassword extends StatelessWidget {
         onPressed: () {
           forgetPasswordController.user.value.email = _forgetPasswordController.text.trim();
           forgetPasswordController.sendEmail();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EnterCode())
+          );
         },
         child: const Text('Enviar Correo', style: TextStyle(fontSize: 20),),
         style: ElevatedButton.styleFrom(

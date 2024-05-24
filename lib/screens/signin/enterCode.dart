@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/icons.dart';
 import 'package:get/get.dart';
+import 'package:myapp/screens/signin/newPassword.dart';
 import 'package:myapp/screens/widgets/description.dart';
 import 'package:myapp/screens/widgets/titleInitialPages.dart';
 import 'package:myapp/constants/colors.dart';
@@ -72,6 +73,10 @@ class EnterCode extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           if(enterCodeController.user.value.tempCode == _enterCodeController.text);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>NewPassword())
+          );
           
         },
         child: Text('Validar Código'),

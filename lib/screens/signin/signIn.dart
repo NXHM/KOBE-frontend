@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/colors.dart';
 import 'package:myapp/screens/Home/home_page.dart';
+import 'package:myapp/screens/signin/login.dart';
 import '../../controllers/singInController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/signin/forgetPassword.dart';
@@ -154,11 +155,15 @@ class SignIn extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
+        Padding( // Ir a Login
           padding: const EdgeInsets.only(top: 30),
           child: TextButton(
             onPressed: () {
-              Get.toNamed('/sign_up');
+              //Get.toNamed('/logIn');
+              Navigator.pushReplacement(
+            context,
+            MaterialPageRoute<void>(builder: (context) => LogIn())
+          );
             },
             child: const Text(
               '¿No tienes una cuenta? Regístrate',

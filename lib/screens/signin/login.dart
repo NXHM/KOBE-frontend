@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/constants/colors.dart';
 import 'package:myapp/controllers/logInController.dart';
 import 'package:get/get.dart';
+import 'package:myapp/screens/signin/signIn.dart';
 
 class LogIn extends StatelessWidget {
   // Verifica si se cambia texto en los textbox
@@ -183,11 +184,15 @@ class LogIn extends StatelessWidget {
   Widget _linksLogin(BuildContext context) {
     return Column(
       children: [
-        Padding(
+        Padding( // Iniciar sesion
           padding: const EdgeInsets.only(top: 30),
           child: TextButton(
             onPressed: () {
-              Get.toNamed('/sign_up');
+              //Get.toNamed('/sign_up');
+              Navigator.pushReplacement(
+            context,
+            MaterialPageRoute<void>(builder: (context) => SignIn())
+          );
             },
             child: const Text(
               '¿Ya tiene una cuenta? Inicie sesión',

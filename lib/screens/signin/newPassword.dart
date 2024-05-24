@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/icons.dart';
+import 'package:myapp/screens/signin/signIn.dart';
 import '../../controllers/newPasswordController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/widgets/description.dart';
@@ -89,14 +90,12 @@ class NewPassword  extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: ElevatedButton(
-        onPressed: null,
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
-          backgroundColor: TDColors.blueLogo,
-        ),
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>SignIn())
+          );
+        },
         child: const SizedBox(
           width: double.infinity,
           child: Center(
@@ -110,7 +109,13 @@ class NewPassword  extends StatelessWidget {
             ),
           ),
         ),
-      ),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          backgroundColor: TDColors.blueLogo,
+        ),),
     );
   }
 
