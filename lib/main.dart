@@ -6,6 +6,6 @@ import 'package:myapp/screens/login.dart';
 void main() => runApp(
   MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: HomePage(),
+    home: loginScreen(),
   )
 );
