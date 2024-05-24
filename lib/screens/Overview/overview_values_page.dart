@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:myapp/screens/Overview/components/build_table.dart';
 
 class OverviewValuesPage extends StatelessWidget {
@@ -36,6 +37,7 @@ class OverviewValuesPage extends StatelessWidget {
   Widget _buildProgressCardNumbers(String type, List<Map<String, dynamic>> data) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.white,
       child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

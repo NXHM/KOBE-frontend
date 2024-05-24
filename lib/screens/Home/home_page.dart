@@ -9,9 +9,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  String _title = "";
+  String _title = "Resumen";
 
   bool showPercentages = true;
+
+  static const List<String> _titles = <String>[
+    "Resumen",
+    "Categorías",
+    "Ingresar Movimiento",
+    "Historial",
+    "Perfil"
+  ];
 
   /* 
   Aquí van las páginas. Estan puestas todos como overview pq salia error si estan vacias.
@@ -20,36 +28,25 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBody() {
     switch(_selectedIndex) {
       case 0: 
-        _title = "Resumen";
         return overviewPage(showPercentages: showPercentages,);
       case 1:
-        _title = "Categorías";
         return overviewPage(showPercentages: showPercentages,);
       case 2:
-        _title = "Ingresar Movimiento";
         return ingresar_movimientos_page();
       case 3:
-        _title = "Historial";
         return overviewPage(showPercentages: showPercentages,);
       case 4:
-        _title = "Perfil";
         return overviewPage(showPercentages: showPercentages,);
       default:
-        _title = "Resumen";
         return overviewPage(showPercentages: showPercentages,);
     }
   }
 
   void _onItemTapped (int index) {
     setState(() {
+      _title = _titles[index];
       _selectedIndex = index;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _title = "Resumen";
   }
 
   void _toggleView() {
@@ -65,6 +62,7 @@ class _HomePageState extends State<HomePage> {
       selectedFontSize: 0,
       iconSize: 30,
       type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.white,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
@@ -99,10 +97,11 @@ class _HomePageState extends State<HomePage> {
   }
   
   PreferredSizeWidget _overviewAppBar() {
-    return AppBar( 
+    return AppBar(
       title: Text(_title,
         style: const TextStyle(fontWeight: FontWeight.bold,),
       ),
+      backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
       actions: [
         Padding(
@@ -126,6 +125,7 @@ class _HomePageState extends State<HomePage> {
       title: Text(_title,
         style: const TextStyle(fontWeight: FontWeight.bold,),
       ),
+      backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
       centerTitle: true,
       leading: IconButton(

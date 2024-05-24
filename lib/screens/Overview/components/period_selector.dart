@@ -38,6 +38,7 @@ class _PeriodSelectorState extends State<PeriodSelector> {
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -56,7 +57,6 @@ class _PeriodSelectorState extends State<PeriodSelector> {
     );
   }
 
-  //TODO: Hacer que los botones tengan el mismo tamaño y esten centrados
   Widget _buildCalendarButtons() {
     return Row(
       children: [
@@ -64,6 +64,7 @@ class _PeriodSelectorState extends State<PeriodSelector> {
           child: DropdownButtonFormField<int>(
             value: widget.year,
             onChanged: (int? value) {widget.changeYear(value!);},
+            dropdownColor: Colors.white,
             items: <int>[
               2022,
               2023,
@@ -85,6 +86,7 @@ class _PeriodSelectorState extends State<PeriodSelector> {
           child: DropdownButtonFormField<int>(
             value: widget.month,
             onChanged: (int? value) {widget.changeMonth(value!);},
+            dropdownColor: Colors.white,
             items: months.keys.map((int key) {
               return DropdownMenuItem<int>(
                 value: key,

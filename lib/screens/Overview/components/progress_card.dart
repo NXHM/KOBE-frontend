@@ -26,6 +26,7 @@ class _ProgressCardState extends State<ProgressCard> {
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16,4,16,16),
         child: Column(

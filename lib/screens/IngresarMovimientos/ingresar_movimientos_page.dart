@@ -73,6 +73,20 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                             initialDate: DateTime.now(),
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2101),
+                            builder: (context, child) {
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  colorScheme: ColorScheme.light(
+                                    primary: Color.fromARGB(255, 0, 20, 60), // Color de los encabezados (barra superior)
+                                    onPrimary: Colors.white, // Color del texto en los encabezados
+                                    surface: Colors.white, // Color del fondo del calendario
+                                    onSurface: Colors.black, // Color del texto en el calendario
+                                  ),
+                                  dialogBackgroundColor: Colors.white, // Color de fondo del cuadro de diálogo
+                                ),
+                                child: child!,
+                              );
+                            }
                           );
                           if (pickedDate != null) {
                             setState(() {
