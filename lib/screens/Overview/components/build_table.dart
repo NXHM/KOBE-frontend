@@ -26,8 +26,8 @@ class buildTable extends StatelessWidget {
         return DataRow(
           cells: [
             DataCell(Text(item["col1"].toString().substring(0, item["col1"].toString().length > 8 ? 10 : null)), ),
-            DataCell(Center( child: Text(item["col2"].toString(), style: boldStyle, textAlign: TextAlign.center,))),
-            DataCell(Center( child: Text(item["col3"].toString(), style: boldStyle, textAlign: TextAlign.center,))),
+            DataCell(Center( child: Text(item["real"].toString(), style: boldStyle, textAlign: TextAlign.center,))),
+            DataCell(Center( child: Text(item["planeado"].toString(), style: boldStyle, textAlign: TextAlign.center,))),
           ]
         );
       }).toList(),

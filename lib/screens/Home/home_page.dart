@@ -104,10 +104,17 @@ class _HomePageState extends State<HomePage> {
       ),
       automaticallyImplyLeading: false,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.percent),
-          selectedIcon: Icon(Icons.attach_money),
-          onPressed: _toggleView,
+        Padding(
+          padding: EdgeInsets.only(right: 4),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: Colors.grey[400],
+            child: IconButton(
+              icon: Icon(!showPercentages ? Icons.percent : Icons.attach_money),
+              onPressed: _toggleView,
+              color: Colors.black,
+            ),
+          ),
         ),
       ],
     );
