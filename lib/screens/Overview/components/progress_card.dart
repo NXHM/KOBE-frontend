@@ -55,9 +55,14 @@ class _ProgressCardState extends State<ProgressCard> {
   }
 
   Widget _buildExpandedProgressBars (List<Map<String,dynamic>> data) {
+    double progress = 0;
+    print(data);
+
     return Column(
         children: data.map((item) {
-          double progress = item["real"]/item["planeado"];
+          if(item["real"] > 0){
+            progress = item["real"]/item["planeado"];
+          }
           return Padding(
             padding: item == data[data.length - 1] ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(bottom: 8),
             child: Column(
@@ -78,8 +83,9 @@ class _ProgressCardState extends State<ProgressCard> {
   double calculateProgress(List<Map<String,dynamic>> data) {
     int total = 0;
     int progress = 0;
-    int real;
-    int planeado;
+    int real = 0;
+    int planeado = 0;
+    double x = 0;
 
     for(int i = 0; i < data.length; i++){
       Map<String, dynamic>item = data[i];
@@ -89,7 +95,9 @@ class _ProgressCardState extends State<ProgressCard> {
       total += planeado;
     }
 
-    double x = progress/total;
+    if(progress > 0){
+      x = progress/total;
+    }else x = 0;
 
     return x >= 1 ? 1 : x;
   }

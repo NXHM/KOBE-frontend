@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:myapp/screens/Overview/overview_controller.dart';
 import 'package:myapp/screens/Overview/overview_percentages_page.dart';
 import 'package:myapp/screens/Overview/overview_values_page.dart';
 import 'package:myapp/screens/Overview/components/period_selector.dart';
@@ -13,22 +15,6 @@ class overviewPage extends StatefulWidget {
 }
 
 class _overviewPageState extends State<overviewPage> {
-  final List<List<Map<String, dynamic>>> data = [
-    [
-      {"col1": "Sueldo", "real": 736, "planeado": 1400,},
-      {"col1": "Dividendos", "real": 37, "planeado": 40,},
-    ],
-    [
-      {"col1": "Comida", "real": 130, "planeado": 240,},
-      {"col1": "Entretenimento", "real": 37, "planeado": 199,},
-      {"col1": "Ropa", "real": 51, "planeado": 300,},
-    ],
-    [
-      {"col1": "Departamento", "real": 325, "planeado": 800,},
-    ],
-  ];
-  
-
   int day = DateTime.now().day;
   int month = DateTime.now().month;
   int year = DateTime.now().year;
@@ -47,6 +33,9 @@ class _overviewPageState extends State<overviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    OverviewController controller = Get.put(OverviewController());
+    List<List<Map<String, dynamic>>> data = controller.data[month-1];
+
     return Padding(
       padding: const EdgeInsets.all(30),
       child: Column(
@@ -61,6 +50,4 @@ class _overviewPageState extends State<overviewPage> {
       )
     );
   }
-
-  
 }
