@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/Overview/overview_page.dart';
 import 'package:myapp/screens/IngresarMovimientos/ingresar_movimientos_page.dart';
+import 'package:myapp/screens/Categories/budgetCategories.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       case 0: 
         return overviewPage(showPercentages: showPercentages,);
       case 1:
-        return overviewPage(showPercentages: showPercentages,);
+        return BudgetCategories();
       case 2:
         return ingresar_movimientos_page();
       case 3:

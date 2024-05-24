@@ -4,10 +4,6 @@ import 'ingresar_movimientos_controller.dart';
 import '../../entities/Tipo.dart';
 import '../../entities/Categoria.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,8 +29,8 @@ class ingresar_movimientos_page extends StatefulWidget {
 class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
   final _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
-  String? _selectedType;
-  String? _selectedCategory;
+  Tipo? _selectedType;
+  Categoria? _selectedCategory;
   double? _amount;
   String? _comment;
 
@@ -120,11 +116,8 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                     ),
                     value: _controller.selectedTipo.value,
                     onChanged: (newValue) {
-                      setState(() {
-                        _selectedType = newValue!.name;
-                        _selectedCategory = null; // Reiniciar categoría al cambiar el tipo
-                        _controller.setSelectedTipo(newValue);
-                      });
+                      _controller.setSelectedTipo(newValue);
+                      _selectedCategory = null; // Reiniciar categoría al cambiar el tipo
                     },
                     items: _controller.tipos.map((Tipo tipo) {
                       return DropdownMenuItem<Tipo>(
@@ -142,39 +135,37 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                   SizedBox(height: 10),
                   Text('Categoría'),
                   SizedBox(height: 5),
-                  DropdownButtonFormField<Categoria>(
-                    decoration: InputDecoration(
-                      hintText: 'Ingrese la categoría',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                  Obx(() {
+                    return DropdownButtonFormField<Categoria>(
+                      decoration: InputDecoration(
+                        hintText: 'Ingrese la categoría',
+                        alignLabelWithHint: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
-                    ),
-                    value: _selectedCategory != null
-                        ? _controller.categorias.firstWhere(
-                            (categoria) => categoria.name == _selectedCategory,
-                            orElse: () => Categoria(id: 0, name: '', tipo: Tipo(id: 0, name: '')))
-                        : null,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedCategory = newValue!.name;
-                      });
-                    },
-                    items: _controller.categorias
-                        .where((categoria) => categoria.tipo.name == _selectedType)
-                        .map<DropdownMenuItem<Categoria>>((Categoria categoria) {
-                      return DropdownMenuItem<Categoria>(
-                        value: categoria,
-                        child: Text(categoria.name),
-                      );
-                    }).toList(),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Por favor seleccione una categoría';
-                      }
-                      return null;
-                    },
-                  ),
+                      value: _selectedCategory,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedCategory = newValue;
+                        });
+                      },
+                      items: _controller.categorias
+                          .where((categoria) => categoria.tipo.id == _controller.selectedTipo.value?.id)
+                          .map((Categoria categoria) {
+                        return DropdownMenuItem<Categoria>(
+                          value: categoria,
+                          child: Text(categoria.name),
+                        );
+                      }).toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Por favor seleccione una categoría';
+                        }
+                        return null;
+                      },
+                    );
+                  }),
                   SizedBox(height: 10),
                   Text('Monto'),
                   SizedBox(height: 5),
@@ -213,59 +204,63 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                       _comment = value;
                     },
                   ),
+                  SizedBox(height: 10), // Añadir espacio adicional aquí
                 ],
               ),
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  // Handle form submission
-                }
-              },
-              child: SizedBox(
-                width: 125,
-                height: 50,
-                child: Center(
-                  child: Text('Siguiente', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20), // Añadir padding para los botones
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    // Handle form submission
+                  }
+                },
+                child: SizedBox(
+                  width: 125,
+                  height: 50,
+                  child: Center(
+                    child: Text('Siguiente', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Color.fromARGB(255, 0, 20, 60),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                 ),
               ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Color.fromARGB(255, 0, 20, 60),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    // Handle form submission
+                  }
+                },
+                child: SizedBox(
+                  width: 125,
+                  height: 50,
+                  child: Center(
+                    child: Text('Listo', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 0, 20, 60),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  // Handle form submission
-                }
-              },
-              child: SizedBox(
-                width: 125,
-                height: 50,
-                child: Center(
-                  child: Text('Listo', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 0, 20, 60),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
