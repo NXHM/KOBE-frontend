@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/Overview/build_table.dart';
+import 'package:myapp/screens/Overview/components/build_table.dart';
 
 class OverviewValuesPage extends StatelessWidget {
   final int month;
