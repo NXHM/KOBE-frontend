@@ -3,7 +3,7 @@ import 'package:myapp/constants/colors.dart';
 
 class loginScreen extends StatelessWidget{
   const loginScreen({super.key});
-
+  const 
 
   @override
   Widget build(BuildContext context){
@@ -20,16 +20,18 @@ class loginScreen extends StatelessWidget{
           child: Center( // Centrado
             child: SingleChildScrollView( // Para scrollear 
               child: Column( // Una sola columna para el contenido
-                children: [
-                  
-                  ClipOval( // Forma circular
-            child: Image.asset('assets/images/Kobey-logo.jpeg', // Imagen
-            fit: BoxFit.cover,
-            width: 200.0,
-            height: 200.0,
-            ),
-          ),
-          SizedBox(height: 40),
+                children: [  
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 40),
+                    child: ClipOval( // Forma circular
+                                child: Image.asset('assets/images/Kobey-logo.jpeg', // Imagen
+                                fit: BoxFit.cover,
+                                width: 200.0,
+                                height: 200.0,
+                                ),
+                              ),
+                  ),
+          //SizedBox(height: 40), 
           const SizedBox(height: 20), //Textbox
                 TextField(
                   decoration: InputDecoration(
@@ -40,7 +42,6 @@ class loginScreen extends StatelessWidget{
                     ),
                   ),
                 ),
-            
           const SizedBox(height: 20), //Textbox
                 TextField(
                   decoration: InputDecoration(
@@ -61,12 +62,13 @@ class loginScreen extends StatelessWidget{
                       borderRadius: BorderRadius.circular(10.0),  // Bordes redondeados del botón
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 15.0), 
-                    backgroundColor: tdBlueLogo // Padding interno del botón
+                    backgroundColor: TDColors.blueLogo, // Fondo del botón
+                    //foregroundColor: Colors.white, // Padding interno del botón
                   ),
                   child: const SizedBox(
                     width: double.infinity,  // Botón ocupa todo el ancho disponible
                     child: Center(
-                      child: Text('Iniciar Sesión', style: TextStyle(fontWeight: FontWeight.bold)),  // Texto del botón
+                      child: Text('Iniciar Sesión', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),  // Texto del botón
                     
                   ),
                 ),
