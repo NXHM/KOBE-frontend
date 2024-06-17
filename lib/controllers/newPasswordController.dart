@@ -1,12 +1,12 @@
 // ignore_for_file: file_names
 
 import 'package:get/get.dart';
-import '../model/UserModel.dart';
+import '../entities/User.dart';
 
 
 // definimos la clase signinController que extiende getx -> getx
 class NewPasswordController extends GetxController {
-  var user = UserModel().obs; //observamos el user del usermodel para detectar cambiazos
+  var user = User().obs; //observamos el user del User para detectar cambiazos
   var statusMessage = ''.obs; //usamos status message para que vea pantallas de estado
 
   //metodo para actulizado el nombre del usuario

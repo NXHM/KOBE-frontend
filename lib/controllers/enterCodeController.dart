@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import '../model/UserModel.dart';
+import '../entities/User.dart';
 
 class EnterCodeController extends GetxController {
-  var user = UserModel().obs; 
+  var user = User().obs; 
   var statusMessage = ''.obs;
 
   Future<void> compareNewPasswords() async {

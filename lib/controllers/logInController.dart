@@ -1,12 +1,12 @@
 // ignore_for_file: file_names
 
 import 'package:get/get.dart';
-import '../model/UserModel.dart';
+import '../entities/User.dart';
 
 
 // definimos la clase signinController que extiende getx -> getx
 class LogInController extends GetxController {
-  var user = UserModel().obs; 
+  var user = User().obs; 
   var statusMessage = ''.obs; //usamos status message para que vea pantallas de estado
 
   

@@ -1,12 +1,12 @@
 // ignore: file_names
-class UserModel {
+class User {
   String? name;
   String? password;
   String? username;
   String? email;
   String? tempCode;
 
-  UserModel({
+  User({
     this.name,
     this.password,
     this.username,
@@ -14,7 +14,7 @@ class UserModel {
     this.tempCode
   });
 
-  UserModel.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     password = json['password'];
     username = json['username'];

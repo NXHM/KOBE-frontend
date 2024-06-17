@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import '../model/UserModel.dart';
+import '../entities/User.dart';
 
 class ForgetPasswordController extends GetxController {
-  var user = UserModel().obs; 
+  var user = User().obs; 
   var statusMessage = ''.obs;
 
   Future<void> sendEmail() async {

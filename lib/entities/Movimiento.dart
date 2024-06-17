@@ -12,7 +12,7 @@ class Movimiento {
 
   Movimiento({
     required this.id,
-    required this.fecha,
+    required this.fecha,  
     required this.tipo,
     required this.categoria,
     required this.monto,
