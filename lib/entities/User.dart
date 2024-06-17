@@ -1,5 +1,7 @@
-// ignore: file_names
+// entities/User.dart
+
 class User {
+  int? id;
   String? name;
   String? password;
   String? username;
@@ -7,14 +9,16 @@ class User {
   String? tempCode;
 
   User({
+    this.id,
     this.name,
     this.password,
     this.username,
     this.email,
-    this.tempCode
+    this.tempCode,
   });
 
   User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     name = json['name'];
     password = json['password'];
     username = json['username'];
@@ -24,6 +28,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id; 
     data['name'] = name;
     data['password'] = password;
     data['username'] = username;
@@ -32,5 +37,3 @@ class User {
     return data;
   }
 }
-
-
