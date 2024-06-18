@@ -259,6 +259,18 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                     print(nuevoMovimiento);
                     // Enviar el movimiento al servidor
                     await _controller.ingresarMovimiento(nuevoMovimiento);
+                       // Mostrar un Snackbar indicando que se añadió el movimiento
+                    Get.snackbar('Éxito', 'Movimiento ingresado correctamente');
+                
+                    // Reiniciar los campos del formulario
+                    _formKey.currentState!.reset();
+                    setState(() {
+                      _selectedDate = null;
+                      _selectedType = null;
+                      _selectedCategory = null;
+                      _amount = null;
+                      _comment = null;
+                    });
                     print("Movimiento enviado");
                   }
                 },
