@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../entities/Tipo.dart';
 import '../../entities/Categoria.dart';
+import '../../entities/Movimiento.dart';
 
 class ingresar_movimientos_controller extends GetxController {
   Rx<Tipo?> selectedTipo = Rx<Tipo?>(null);
@@ -55,4 +56,50 @@ class ingresar_movimientos_controller extends GetxController {
   void setSelectedTipo(Tipo? newValue) {
     selectedTipo.value = newValue;
   }
+
+  Future<void> ingresarMovimiento(Movimiento movimiento) async {
+  print("Ingresa a controlador movimiento");
+  final url = Uri.parse('http://10.0.2.2:3000/api/ingresarMovimiento');
+  
+  final body = json.encode({
+    'fecha': movimiento.fecha.toIso8601String(),
+    'tipo_id': movimiento.tipo.id,
+    'categoria_id': movimiento.categoria.id,
+    'monto': movimiento.monto,
+    'comentario': movimiento.comentario,
+    'usuario_id': movimiento.usuario.id,
+  });
+  
+  print("BODY");
+  print(body);
+
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: body,
+  );
+
+  print("RESPONSE");
+  print(response.statusCode);
+  print(response.body);
+
+  if (response.statusCode == 201) {
+    Get.snackbar('Éxito', 'Movimiento ingresado correctamente');
+    print("Movimiento ingresado correctamente");
+  } else {
+    // Intenta obtener un mensaje de error del cuerpo de la respuesta si está disponible
+    String errorMessage = 'Hubo un problema al ingresar el movimiento';
+    if (response.body.isNotEmpty) {
+      try {
+        var errorJson = json.decode(response.body);
+        errorMessage = errorJson['message'] ?? errorMessage;
+      } catch (e) {
+        print('Error al decodificar mensaje de error: $e');
+      }
+    }
+    Get.snackbar('Error', errorMessage);
+    print("Hubo un problema al ingresar el movimiento: $errorMessage");
+  }
+}
+
 }

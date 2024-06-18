@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'ingresar_movimientos_controller.dart';
 import '../../entities/Tipo.dart';
 import '../../entities/Categoria.dart';
+import '../../entities/Movimiento.dart';
+import '../../entities/User.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -73,16 +75,16 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                               return Theme(
                                 data: ThemeData.light().copyWith(
                                   colorScheme: ColorScheme.light(
-                                    primary: Color.fromARGB(255, 0, 20, 60), // Color de los encabezados (barra superior)
-                                    onPrimary: Colors.white, // Color del texto en los encabezados
-                                    surface: Colors.white, // Color del fondo del calendario
-                                    onSurface: Colors.black, // Color del texto en el calendario
+                                    primary: Color.fromARGB(255, 0, 20, 60),
+                                    onPrimary: Colors.white,
+                                    surface: Colors.white,
+                                    onSurface: Colors.black,
                                   ),
-                                  dialogBackgroundColor: Colors.white, // Color de fondo del cuadro de diálogo
+                                  dialogBackgroundColor: Colors.white,
                                 ),
                                 child: child!,
                               );
-                            }
+                            },
                           );
                           if (pickedDate != null) {
                             setState(() {
@@ -107,31 +109,31 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                   Text('Tipo'),
                   SizedBox(height: 5),
                   Obx(() => DropdownButtonFormField<Tipo>(
-                    decoration: InputDecoration(
-                      hintText: 'Ingrese el tipo',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    value: _controller.selectedTipo.value,
-                    onChanged: (newValue) {
-                      _controller.setSelectedTipo(newValue);
-                      _selectedCategory = null; // Reiniciar categoría al cambiar el tipo
-                    },
-                    items: _controller.tipos.map((Tipo tipo) {
-                      return DropdownMenuItem<Tipo>(
-                        value: tipo,
-                        child: Text(tipo.name),
-                      );
-                    }).toList(),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Por favor seleccione un tipo';
-                      }
-                      return null;
-                    },
-                  )),
+                        decoration: InputDecoration(
+                          hintText: 'Ingrese el tipo',
+                          alignLabelWithHint: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        value: _controller.selectedTipo.value,
+                        onChanged: (newValue) {
+                          _controller.setSelectedTipo(newValue);
+                          _selectedCategory = null; // Reiniciar categoría al cambiar el tipo
+                        },
+                        items: _controller.tipos.map((Tipo tipo) {
+                          return DropdownMenuItem<Tipo>(
+                            value: tipo,
+                            child: Text(tipo.name),
+                          );
+                        }).toList(),
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Por favor seleccione un tipo';
+                          }
+                          return null;
+                        },
+                      )),
                   SizedBox(height: 10),
                   Text('Categoría'),
                   SizedBox(height: 5),
@@ -199,19 +201,19 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
-                    maxLines: 5, // Set the number of lines
+                    maxLines: 5,
                     onSaved: (value) {
                       _comment = value;
                     },
                   ),
-                  SizedBox(height: 10), // Añadir espacio adicional aquí
+                  SizedBox(height: 10),
                 ],
               ),
             ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 20), // Añadir padding para los botones
+          padding: const EdgeInsets.only(bottom: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -219,7 +221,8 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    // Handle form submission
+                    // Implementar aquí cualquier lógica adicional antes de enviar el movimiento
+                    // No se realiza la llamada al servidor aquí, solo validación y guardado de datos
                   }
                 },
                 child: SizedBox(
@@ -238,10 +241,25 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    // Handle form submission
+                    print("Ingresa accion");
+                    // Crear objeto Movimiento con los datos del formulario
+                    Movimiento nuevoMovimiento = Movimiento(
+                      id: 0, // Esto se asignará en el servidor
+                      fecha: _selectedDate!,
+                      tipo: _controller.selectedTipo.value!,
+                      categoria: _selectedCategory!,
+                      monto: _amount!,
+                      comentario: _comment ?? '',
+                      usuario: User(id: 1, name: 'Usuario de ejemplo'), // Aquí deberías obtener el usuario actual
+                    );
+                    print("Objeto creado");
+                    print(nuevoMovimiento);
+                    // Enviar el movimiento al servidor
+                    await _controller.ingresarMovimiento(nuevoMovimiento);
+                    print("Movimiento enviado");
                   }
                 },
                 child: SizedBox(
