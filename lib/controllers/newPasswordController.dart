@@ -19,7 +19,7 @@ class NewPasswordController extends GetxController {
           body: jsonEncode({'email': email, 'newPassword':newPassword,'confirmPassword':confirmPassword}),
         );
         if (response.statusCode == 200) {
-          statusMessage.value = 'Password Changed Succesfully';
+          statusMessage.value = 'Password Changed Successfully';
         } else {
           statusMessage.value = 'Password has not changed';
         }

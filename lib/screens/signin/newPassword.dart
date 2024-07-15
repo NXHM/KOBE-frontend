@@ -101,7 +101,7 @@ class NewPassword extends StatelessWidget {
           await newPasswordController.changePassword(
               email, _newPasswordController.text, _newRepeatPasswordController.text);
           if (newPasswordController.statusMessage.value ==
-              "Contraseña cambiada") {
+              "Password Changed Successfully") {
             _newPasswordController.clear();
             _newRepeatPasswordController.clear();
             Navigator.pushReplacement(
@@ -109,7 +109,7 @@ class NewPassword extends StatelessWidget {
           }
         } else {
           newPasswordController.statusMessage.value =
-              "Las contraseñas no coinciden";
+              "Password has not changed";
         }
       },
       style: ElevatedButton.styleFrom(
