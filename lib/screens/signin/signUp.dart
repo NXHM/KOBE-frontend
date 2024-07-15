@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/colors.dart';
+import 'package:myapp/screens/signin/successfulRegistration.dart';
 import 'package:myapp/controllers/signUpController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/signin/signIn.dart';
@@ -9,7 +10,8 @@ class SignUp extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _repeatPasswordController = TextEditingController();
+  final TextEditingController _repeatPasswordController =
+      TextEditingController();
   final SignUpController signUpController = Get.put(SignUpController());
 
   SignUp({super.key});
@@ -45,7 +47,8 @@ class SignUp extends StatelessWidget {
                 Obx(() => Text(
                       signUpController.statusMessage.value,
                       style: TextStyle(
-                        color: signUpController.statusMessage.value == 'Sign-up successful'
+                        color: signUpController.statusMessage.value ==
+                                'Sign-up successful'
                             ? Colors.green
                             : Colors.red,
                       ),
@@ -64,16 +67,23 @@ class SignUp extends StatelessWidget {
       child: Column(
         children: [
           _buildTextField(_nameController, 'Nombre Completo', Icons.person),
-          _buildTextField(_usernameController, 'Nombre de Usuario', Icons.person),
-          _buildTextField(_emailController, 'Correo electrónico', Icons.email_rounded),
-          _buildTextField(_passwordController, 'Contraseña', Icons.lock, isPassword: true),
-          _buildTextField(_repeatPasswordController, 'Confirmar Contraseña', Icons.lock, isPassword: true),
+          _buildTextField(
+              _usernameController, 'Nombre de Usuario', Icons.person),
+          _buildTextField(
+              _emailController, 'Correo electrónico', Icons.email_rounded),
+          _buildTextField(_passwordController, 'Contraseña', Icons.lock,
+              isPassword: true),
+          _buildTextField(
+              _repeatPasswordController, 'Confirmar Contraseña', Icons.lock,
+              isPassword: true),
         ],
       ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon, {bool isPassword = false}) {
+  Widget _buildTextField(
+      TextEditingController controller, String label, IconData icon,
+      {bool isPassword = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: TextField(
@@ -109,6 +119,12 @@ class SignUp extends StatelessWidget {
               _passwordController.text,
               _repeatPasswordController.text,
             );
+            if (signUpController.statusMessage.value == 'Sign-up successful') {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) => SuccessfulRegistration()));
+            }
           } else {
             Get.snackbar('Error', 'Por favor, complete todos los campos');
           }
@@ -144,10 +160,8 @@ class SignUp extends StatelessWidget {
           padding: const EdgeInsets.only(top: 30),
           child: TextButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute<void>(builder: (context) => SignIn())
-              );
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute<void>(builder: (context) => SignIn()));
             },
             child: const Text(
               '¿Ya tiene una cuenta? Inicie sesión',

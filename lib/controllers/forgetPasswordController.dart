@@ -1,18 +1,31 @@
 import 'package:get/get.dart';
-import '../entities/User.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ForgetPasswordController extends GetxController {
-  var user = User().obs; 
   var statusMessage = ''.obs;
 
-  Future<void> sendEmail() async {
-    final String email = user.value.email ?? ''; // Fix: use 'email' instead of 'password'
-    const List<String> emails = ['nicogod@gmail.com', 'nicoultragod@gmail.com']; // Stored emails
-
-    if (emails.contains(email)) {
-      statusMessage.value = "Email enviado"; // Call API to send recovery email
+  Future<void> sendEmail(String email) async {
+    if (email.isNotEmpty) {
+      const url = 'https://bd1d-38-25-15-113.ngrok-free.app/api/requestVerification';
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({'email': email}),
+        );
+        if (response.statusCode == 200) {
+          statusMessage.value = 'Code sent successfully';
+        } else {
+          statusMessage.value = 'Not email associated';
+        }
+      } catch (e) {
+        statusMessage.value = 'Error: $e';
+      }
     } else {
-      statusMessage.value = "El correo no está asociado a alguna cuenta";
+      statusMessage.value = 'Please enter an email';
     }
   }
 }

@@ -1,32 +1,33 @@
 // ignore_for_file: file_names
-
 import 'package:get/get.dart';
-import '../entities/User.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // definimos la clase signinController que extiende getx -> getx
 class NewPasswordController extends GetxController {
-  var user = User().obs; //observamos el user del User para detectar cambiazos
   var statusMessage = ''.obs; //usamos status message para que vea pantallas de estado
 
-  //metodo para actulizado el nombre del usuario
-  void updatePassword(String password) {
-    user.update((user) {
-      user?.password = password; //actualizamos el nombre
-    });
-  }
-
-  Future<void> newPassword() async {
-    final String password = user.value.password ?? '';
-    const String newPassword = '123456';
-
-    if (newPassword == password && newPassword.isNotEmpty) {
-
-        updatePassword(newPassword);
-        statusMessage.value = 'New Password';
-      
+  Future<void> changePassword(String email, String newPassword, String confirmPassword) async {
+    if (email.isNotEmpty) {
+      const url = 'https://bd1d-38-25-15-113.ngrok-free.app/api/changePassword';
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({'email': email, 'newPassword':newPassword,'confirmPassword':confirmPassword}),
+        );
+        if (response.statusCode == 200) {
+          statusMessage.value = 'Password Changed Succesfully';
+        } else {
+          statusMessage.value = 'Password has not changed';
+        }
+      } catch (e) {
+        statusMessage.value = 'Error: $e';
+      }
     } else {
-      statusMessage.value = 'Invalid password';
+      statusMessage.value = 'Please enter an email';
     }
   }
 }

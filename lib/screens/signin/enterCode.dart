@@ -6,18 +6,21 @@ import 'package:myapp/screens/widgets/description.dart';
 import 'package:myapp/screens/widgets/titleInitialPages.dart';
 import 'package:myapp/constants/colors.dart';
 import 'package:myapp/controllers/enterCodeController.dart';
+
 class EnterCode extends StatelessWidget {
   final TextEditingController _enterCodeController = TextEditingController();
-  final EnterCodeController enterCodeController = Get.put(EnterCodeController());
+  final EnterCodeController enterCodeController =
+      Get.put(EnterCodeController());
+  final String email;
 
-  EnterCode({super.key});
+  EnterCode({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: TDIcons.backArrow,  // Assuming TDIcons.backArrow is an IconData
+          icon: TDIcons.backArrow,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -31,26 +34,27 @@ class EnterCode extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TitleInitialPages(title: 'Ingresar Código'),
-            Description(description: 'Ingresa el código enviado a la dirección de correo electrónico para cambiar su contraseña.'),
-            //_title(context, '¿Te olvidaste tu contraseña?'),
-            //_description(context, 'Ingresa tu correo electrónico vinculado para restablecer tu contraseña.'),
+            Description(
+                description:
+                    'Ingresa el código enviado a la dirección de correo electrónico para cambiar su contraseña.'),
             _inputFieldCode(context),
             SizedBox(height: 20),
             _submitButton(context),
             SizedBox(height: 20),
             Obx(() => Text(
-              enterCodeController.statusMessage.value,
-              style: TextStyle(
-                color: enterCodeController.statusMessage.value == "Email enviado" ? Colors.green : Colors.red,
-              ),
-            )),
+                  enterCodeController.statusMessage.value,
+                  style: TextStyle(
+                    color: enterCodeController.statusMessage.value ==
+                            "Code validated successfully"
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                )),
           ],
         ),
       ),
     );
   }
-
-
 
   Widget _inputFieldCode(BuildContext context) {
     return Padding(
@@ -68,20 +72,19 @@ class EnterCode extends StatelessWidget {
     );
   }
 
- Widget _submitButton(BuildContext context) {
+  Widget _submitButton(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          if(enterCodeController.user.value.tempCode == _enterCodeController.text);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>NewPassword())
-          );
-          
+        onPressed: () async {
+          await enterCodeController.validateCode(email, _enterCodeController.text);
+          if (enterCodeController.statusMessage.value == "Code validated successfully") {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => NewPassword(email: email)));
+          }
         },
         child: Text('Validar Código'),
         style: ElevatedButton.styleFrom(
-          backgroundColor: TDColors.blueLogo,  
+          backgroundColor: TDColors.blueLogo,
           foregroundColor: Colors.white,
           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           shape: RoundedRectangleBorder(

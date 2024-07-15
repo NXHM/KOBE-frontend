@@ -24,10 +24,8 @@ class SignUpController extends GetxController {
           'email': email,
         }),
       );
-      print('hola');
-
       if (response.statusCode == 200) {
-        statusMessage.value = 'Log-in successful';
+        statusMessage.value = 'Sign-up successful';
       } else {
         statusMessage.value = 'Invalid username or password';
       }

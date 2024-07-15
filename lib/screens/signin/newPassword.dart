@@ -7,20 +7,22 @@ import 'package:myapp/screens/widgets/description.dart';
 import 'package:myapp/screens/widgets/titleInitialPages.dart';
 import 'package:myapp/constants/colors.dart';
 
-
-class NewPassword  extends StatelessWidget {
+class NewPassword extends StatelessWidget {
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _newRepeatPasswordController = TextEditingController();
-  final NewPasswordController newPasswordController = Get.put(NewPasswordController());
+  final TextEditingController _newRepeatPasswordController =
+      TextEditingController();
+  final NewPasswordController newPasswordController =
+      Get.put(NewPasswordController());
+  final String email;
 
-  NewPassword({super.key});
+  NewPassword({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: TDIcons.backArrow,  // Assuming TDIcons.backArrow is an IconData
+          icon: const Icon(Icons.arrow_back), // Usar un Icon predeterminado
           onPressed: () {
             Navigator.pop(context);
           },
@@ -28,111 +30,108 @@ class NewPassword  extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TitleInitialPages(title: 'Nueva Contraseña'),
-            const Description(description: 'Al crear su nueva contraseña, debe ser diferente de su contrasela anterior.'),
-            _inputFieldsPassword(context),
-            //_visualIndicator(context),
-            _submitButton(context),
-            Obx(() => Text(
-              newPasswordController.statusMessage.value,
-              style: TextStyle(
-                color: newPasswordController.statusMessage.value == "Contraseña cambiada" ? Colors.green : Colors.red,
-              ),
-            )),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const TitleInitialPages(title: 'Nueva Contraseña'),
+              const SizedBox(height: 10),
+              const Description(
+                  description:
+                      'Al crear su nueva contraseña, debe ser diferente de su contraseña anterior.'),
+              const SizedBox(height: 20),
+              _inputFieldsPassword(context),
+              const SizedBox(height: 20),
+              _submitButton(context),
+              const SizedBox(height: 10),
+              Obx(() => Text(
+                    newPasswordController.statusMessage.value,
+                    style: TextStyle(
+                      color: newPasswordController.statusMessage.value ==
+                              "Contraseña cambiada"
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                  )),
+            ],
+          ),
         ),
       ),
     );
   }
 
-
-
   Widget _inputFieldsPassword(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 150, right: 5, left: 5),
-      child: Column(
-      children:[
-        Padding(padding: const EdgeInsets.only(bottom: 20),
-        child: TextField(
-        controller: _newPasswordController,
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.lock),
-          labelText: 'Nueva Contraseña',
-          hintText: 'Ingresa Contraseña',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
+    return Column(
+      children: [
+        TextField(
+          controller: _newPasswordController,
+          obscureText: true,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.lock),
+            labelText: 'Nueva Contraseña',
+            hintText: 'Ingresa Contraseña',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
           ),
         ),
-      )
-      ),
-      TextField(
-        controller: _newRepeatPasswordController,
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.lock),
-          labelText: 'Confirmar Contraseña',
-          hintText: 'Confirmar Contraseña',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
+        const SizedBox(height: 20),
+        TextField(
+          controller: _newRepeatPasswordController,
+          obscureText: true,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.lock),
+            labelText: 'Confirmar Contraseña',
+            hintText: 'Confirmar Contraseña',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
           ),
         ),
-      ),
-      ]
-    )
+      ],
     );
   }
 
   Widget _submitButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: ElevatedButton(
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>SignIn())
-          );
-        },
-        child: const SizedBox(
-          width: double.infinity,
-          child: Center(
-            child: Text(
-              'Cambiar Contraseña',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 20,
-              ),
+    return ElevatedButton(
+      onPressed: () async {
+        if (_newPasswordController.text == _newRepeatPasswordController.text) {
+          await newPasswordController.changePassword(
+              email, _newPasswordController.text, _newRepeatPasswordController.text);
+          if (newPasswordController.statusMessage.value ==
+              "Contraseña cambiada") {
+            _newPasswordController.clear();
+            _newRepeatPasswordController.clear();
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => SignIn()));
+          }
+        } else {
+          newPasswordController.statusMessage.value =
+              "Las contraseñas no coinciden";
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 15.0),
+        backgroundColor: TDColors.blueLogo,
+      ),
+      child: const SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: Text(
+            'Cambiar Contraseña',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 20,
             ),
           ),
         ),
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
-          backgroundColor: TDColors.blueLogo,
-        ),),
+      ),
     );
-  }
-
-  Widget _visualIndicator(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 100),
-    child:(Stack(
-      children: [
-      const Text(
-              'Debe tener al menos 8 caracteres',
-              style: TextStyle(color: Colors.grey),
-            ),
-      const Text(
-              'Contiene al menos un número',
-              style: TextStyle(color: Colors.grey),
-            )
-    ],)
-    ));
   }
 }
