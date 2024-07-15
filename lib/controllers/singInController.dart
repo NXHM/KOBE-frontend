@@ -1,50 +1,48 @@
-// ignore_for_file: file_names
-
 import 'package:get/get.dart';
-import '../entities/User.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+class SignInResult {
+  final bool isSuccess;
+  final String message;
+  final String? token;
 
-// definimos la clase signinController que extiende getx -> getx
+  SignInResult({required this.isSuccess, required this.message, this.token});
+}
+
 class SignInController extends GetxController {
-  var user = User().obs; //observamos el user del User para detectar cambiazos
-  var statusMessage = ''.obs; //usamos status message para que vea pantallas de estado
+  var statusMessage = ''.obs;
 
-  //metodo para actulizado el nombre del usuario
-  void updateName(String name) {
-    user.update((user) {
-      user?.name = name; //actualizamos el nombre
-    });
-  }
-
-  //metodo para actualizar la contraseña del usuario
-  void updateUserPassword(String password) {
-    user.update((user) {
-      user?.password = password; //
-    });
-  }
-
-  //metodo para actualizar el username del usuario
-  void updateUserName(String username) {
-    user.update((user) {
-      user?.username = username;
-    });
-  }
-
-  Future<void> signIn() async {
-    final String password = user.value.password ?? '';
-    final String username = user.value.username ?? '';
-
+  Future<SignInResult> signIn(String username, String password) async {
     if (username.isNotEmpty && password.isNotEmpty) {
-      const hardcodedName = 'testUser';
-      const hardcodedPassword = '123456';
+      try {
+        final response = await http.post(
+          Uri.parse('https://bd1d-38-25-15-113.ngrok-free.app/api/loginUser'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'username': username,
+            'password': password,
+          }),
+        );
 
-      if (username == hardcodedName && password == hardcodedPassword) {
-        statusMessage.value = 'Sign-in successful';
-      } else {
-        statusMessage.value = 'Invalid username or password';
+        if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          final token = responseData['token'];
+          statusMessage.value = 'Sign-in successful';
+          return SignInResult(isSuccess: true, message: 'Sign-in successful', token: token);
+        } else {
+          statusMessage.value = 'Invalid username or password';
+          return SignInResult(isSuccess: false, message: 'Invalid username or password');
+        }
+      } catch (e) {
+        statusMessage.value = 'Error connecting to the server';
+        return SignInResult(isSuccess: false, message: 'Error connecting to the server');
       }
     } else {
       statusMessage.value = 'Please enter both username and password';
+      return SignInResult(isSuccess: false, message: 'Please enter both username and password');
     }
   }
 }

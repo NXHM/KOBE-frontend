@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/constants/icons.dart';
 import 'package:myapp/constants/colors.dart';
 import 'package:myapp/screens/signin/enterCode.dart';
-import 'package:myapp/screens/signin/signIn.dart';
+import 'package:myapp/screens/signin/signUp.dart';
 import '../../controllers/forgetPasswordController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/widgets/description.dart';

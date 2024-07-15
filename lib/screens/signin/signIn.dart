@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/colors.dart';
 import 'package:myapp/screens/Home/home_page.dart';
-import 'package:myapp/screens/signin/login.dart';
+import 'package:myapp/screens/signin/signUp.dart';
 import '../../controllers/singInController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/signin/forgetPassword.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class SignIn extends StatelessWidget {
-  // Verifica si se cambia texto en los textbox
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final SignInController signInController = Get.put(SignInController());
- SignIn({super.key});
+  final storage = FlutterSecureStorage();
+
+  SignIn({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class SignIn extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding:  EdgeInsets.only(top: 10, bottom: 25),
+                  padding: EdgeInsets.only(top: 10, bottom: 25),
                   child: ClipOval(
                     child: Image.asset(
                       'assets/images/Kobey-logo.jpeg',
@@ -43,7 +46,8 @@ class SignIn extends StatelessWidget {
                 Obx(() => Text(
                       signInController.statusMessage.value,
                       style: TextStyle(
-                        color: signInController.statusMessage.value == 'Sign-in successful'
+                        color: signInController.statusMessage.value ==
+                                'Sign-in successful'
                             ? Colors.green
                             : Colors.red,
                       ),
@@ -56,7 +60,6 @@ class SignIn extends StatelessWidget {
     );
   }
 
-  // Textboxes
   Widget _inputField(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
@@ -64,8 +67,8 @@ class SignIn extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            child: TextField( // Nombre
-              controller: _nameController,
+            child: TextField(
+              controller: _usernameController,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.person),
                 labelText: 'Nombre de Usuario',
@@ -75,7 +78,7 @@ class SignIn extends StatelessWidget {
               ),
             ),
           ),
-          TextField( // Contraseña
+          TextField(
             controller: _passwordController,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock),
@@ -91,24 +94,26 @@ class SignIn extends StatelessWidget {
     );
   }
 
-  // Button to sign in
   Widget _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: ElevatedButton(
-        onPressed: () {
-          if (_nameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-            signInController.updateUserName(_nameController.text);
-            signInController.updateUserPassword(_passwordController.text);
-            signInController.signIn();
-            if (signInController.statusMessage.value == 'Sign-in successful') {
-              //Get.toNamed('/home'); // Navigate to the home page
-              Navigator.pushReplacement(
-            context,
-            MaterialPageRoute<void>(builder: (context) => HomePage() )
-          );
+        onPressed: () async {
+          if (_usernameController.text.isNotEmpty &&
+              _passwordController.text.isNotEmpty) {
+            final result = await signInController.signIn(
+              _usernameController.text,
+              _passwordController.text,
+            );
+            if (result.isSuccess) {
+              // Guardar el token JWT
+              await storage.write(key: 'jwt_token', value: result.token);
+              // Navegar a la página de inicio
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute<void>(builder: (context) => HomePage()));
+            } else {
+              Get.snackbar('Error', result.message);
             }
-  
           } else {
             Get.snackbar('Error', 'Please fill in all fields');
           }
@@ -137,7 +142,6 @@ class SignIn extends StatelessWidget {
     );
   }
 
-  // Login links
   Widget _linksLogin(BuildContext context) {
     return Column(
       children: [
@@ -145,8 +149,7 @@ class SignIn extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10),
           child: TextButton(
             onPressed: () {
-               //Get.toNamed('/forgot_password'); 
-               Navigator.push(context,
+              Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ForgetPassword()));
             },
             child: const Text(
@@ -155,15 +158,12 @@ class SignIn extends StatelessWidget {
             ),
           ),
         ),
-        Padding( // Ir a Login
+        Padding(
           padding: const EdgeInsets.only(top: 30),
           child: TextButton(
             onPressed: () {
-              //Get.toNamed('/logIn');
-              Navigator.pushReplacement(
-            context,
-            MaterialPageRoute<void>(builder: (context) => LogIn())
-          );
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute<void>(builder: (context) => SignUp()));
             },
             child: const Text(
               '¿No tienes una cuenta? Regístrate',
