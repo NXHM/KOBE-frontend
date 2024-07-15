@@ -4,9 +4,9 @@ import 'package:myapp/screens/widgets/signInButton.dart';
 import 'package:myapp/screens/widgets/titleInitialPages.dart';
 import 'package:myapp/screens/widgets/description.dart';
 
-class SuccessfulRegistration extends StatelessWidget{
+class SuccessfulChangePassword extends StatelessWidget{
   
-  const SuccessfulRegistration({super.key});
+  const SuccessfulChangePassword({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,10 @@ class SuccessfulRegistration extends StatelessWidget{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             TitleInitialPages(title:'Registro Exitoso'),
+             TitleInitialPages(title:'Cambio Realizado'),
             Padding(padding:  EdgeInsets.only(bottom: 100),
             child: 
-               Description(description:'Su cuenta ha sido creada exitosamente.'
+               Description(description:'Se ha modificado su contraseña de manera exitosa.'
               ),
             ),
              SignInButton(),

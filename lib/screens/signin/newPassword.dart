@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/constants/icons.dart';
-import 'package:myapp/screens/signin/signIn.dart';
+import 'package:myapp/screens/signin/succesfulChangePassword.dart';
 import '../../controllers/newPasswordController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/widgets/description.dart';
@@ -105,7 +105,7 @@ class NewPassword extends StatelessWidget {
             _newPasswordController.clear();
             _newRepeatPasswordController.clear();
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => SignIn()));
+                context, MaterialPageRoute(builder: (context) => SuccessfulChangePassword()));
           }
         } else {
           newPasswordController.statusMessage.value =
