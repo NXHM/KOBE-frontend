@@ -123,7 +123,7 @@ class SignUp extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute<void>(
-                      builder: (context) => SuccessfulRegistration()));
+                      builder: (context) => const SuccessfulRegistration()));
             }
           } else {
             Get.snackbar('Error', 'Por favor, complete todos los campos');

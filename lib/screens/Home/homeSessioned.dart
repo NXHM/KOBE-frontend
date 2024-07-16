@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:math';
 import 'package:myapp/controllers/authController.dart';
 import 'package:myapp/screens/Overview/overview_page.dart';
 import 'package:myapp/screens/IngresarMovimientos/ingresar_movimientos_page.dart';
 import 'package:myapp/screens/Categories/budgetCategories.dart';
 import 'package:myapp/screens/Historial/historial_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePageSessioned extends StatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePageSessioned> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePageSessioned> {
   int _selectedIndex = 0;
   String _title = "Resumen";
-
   bool showPercentages = true;
+  String? token;
+  final AuthController authController = Get.find<AuthController>();
 
   static const List<String> _titles = <String>[
     "Resumen",
@@ -24,11 +27,41 @@ class _HomePageState extends State<HomePage> {
     "Perfil"
   ];
 
-  /* 
-  Aquí van las páginas. Estan puestas todos como overview pq salia error si estan vacias.
-  Las cambian mis causas. :)
-   */
+  @override
+  void initState() {
+    super.initState();
+    _loadToken();
+  }
+
+  Future<void> _loadToken() async {
+    String? loadedToken = await authController.getToken();
+    setState(() {
+      token = loadedToken;
+    });
+    print('Token completo: $token'); // Imprime el token completo en la consola
+  }
+
   Widget _buildBody() {
+    return Column(
+      children: [
+        // Widget discreto para mostrar parte del token
+        if (token != null)
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+            color: Colors.grey[200],
+            child: Text(
+              'Token: ${token!.substring(0, min(10, token!.length))}...',
+              style: TextStyle(fontSize: 10),
+            ),
+          ),
+        Expanded(
+          child: _buildContent(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContent() {
     switch(_selectedIndex) {
       case 0: 
         return overviewPage(showPercentages: showPercentages,);
@@ -45,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _onItemTapped (int index) {
+  void _onItemTapped(int index) {
     setState(() {
       _title = _titles[index];
       _selectedIndex = index;
@@ -142,13 +175,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold( 
       appBar: _selectedIndex == 0 ? _overviewAppBar() : _buildAppBar(),
-        //actions: [],
       body: Container(
         color: Color(0xFFEBEDF0),
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child:  _buildBody()
-        ),
+        child: _buildBody(),
       ),
       bottomNavigationBar: _bottomNavigation(),
     );

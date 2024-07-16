@@ -17,7 +17,7 @@ class SignInController extends GetxController {
     if (username.isNotEmpty && password.isNotEmpty) {
       try {
         final response = await http.post(
-          Uri.parse('https://bd1d-38-25-15-113.ngrok-free.app/api/loginUser'),
+          Uri.parse('https://906b-191-98-138-140.ngrok-free.app/api/loginUser'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

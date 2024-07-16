@@ -10,7 +10,7 @@ class SignUpController extends GetxController {
   // Metodo para crear usuario
   Future<void> createUser(String name, String username, String email, String password, String confirmPassword) async {
     if (username.isNotEmpty && password.isNotEmpty && name.isNotEmpty && email.isNotEmpty) {
-      const url = 'https://bd1d-38-25-15-113.ngrok-free.app/api/createUser'; // Reemplaza <ngrok_url> con la URL generada por ngrok
+      const url = 'https://906b-191-98-138-140.ngrok-free.app/api/createUser'; // Reemplaza <ngrok_url> con la URL generada por ngrok
       final response = await http.post(
         Uri.parse(url),
         headers: {

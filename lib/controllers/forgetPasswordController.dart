@@ -7,7 +7,7 @@ class ForgetPasswordController extends GetxController {
 
   Future<void> sendEmail(String email) async {
     if (email.isNotEmpty) {
-      const url = 'https://bd1d-38-25-15-113.ngrok-free.app/api/requestVerification';
+      const url = 'https://906b-191-98-138-140.ngrok-free.app/api/requestVerification';
       try {
         final response = await http.post(
           Uri.parse(url),

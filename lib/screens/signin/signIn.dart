@@ -5,8 +5,8 @@ import 'package:myapp/screens/signin/signUp.dart';
 import '../../controllers/singInController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/signin/forgetPassword.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:myapp/screens/widgets/auth.dart';
+import 'package:myapp/screens/Home/homeSessioned.dart';
 
 class SignIn extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -109,10 +109,9 @@ class SignIn extends StatelessWidget {
             if (result.isSuccess) {
               // Guardar el token JWT
               await authService.setToken(result.token!);
-              debugPrint(await authService.getToken());
               // Navegar a la página de inicio
               Navigator.pushReplacement(context,
-                  MaterialPageRoute<void>(builder: (context) => HomePage()));
+                  MaterialPageRoute<void>(builder: (context) => HomePageSessioned()));
             } else {
               Get.snackbar('Error', result.message);
             }
