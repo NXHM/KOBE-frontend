@@ -64,12 +64,11 @@ class ingresar_movimientos_controller extends GetxController {
   final url = Uri.parse('http://10.0.2.2:3000/api/ingresarMovimiento');
   
   final body = json.encode({
-    'fecha': movimiento.fecha.toIso8601String(),
-    'type_id': movimiento.tipo.id,
-    'categoria_id': movimiento.categoria.id,
-    'monto': movimiento.monto,
-    'comentario': movimiento.comentario,
-    'usuario_id': movimiento.usuario.id,
+    'amount': movimiento.monto.toDouble(),
+    'detail': movimiento.comentario,
+    'date': movimiento.fecha.toIso8601String(),
+    'user_id': movimiento.usuario.id,
+    'category_id': movimiento.categoria.id,
   });
   
   print("BODY");

@@ -254,7 +254,7 @@ Widget build(BuildContext context) {
                       categoria: _selectedCategory!,
                       monto: _amount!,
                       comentario: _comment ?? '',
-                      usuario: User(id: 1, name: 'Usuario de ejemplo'), // Aquí deberías obtener el usuario actual
+                      usuario: User(id: 5, name: 'Flavio'), // Aquí deberías obtener el usuario actual
                     );
                     print("Objeto creado");
                     print(nuevoMovimiento);
