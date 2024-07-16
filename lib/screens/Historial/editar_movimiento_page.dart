@@ -4,7 +4,7 @@ import 'package:myapp/entities/Categoria.dart';
 import 'package:myapp/entities/Tipo.dart';
 import 'package:myapp/screens/Home/home_page.dart';
 import 'historial_page.dart';
-import 'historial_controller.dart';
+import 'editar_movimiento_controller.dart';
 import '../../entities/Movimiento.dart';
 
 class MyApp extends StatelessWidget {
@@ -30,7 +30,15 @@ class _EditarMovimientoPageState extends State<EditarMovimientoPage> {
   double? _amount;
   String? _comment;
 
-  final HistorialController _controller = Get.put(HistorialController());
+  EditarMovimientoController _controller =
+      Get.put(EditarMovimientoController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _controller.getCategoria();
+    super.initState();
+  }
 
   @override
   @override

@@ -6,8 +6,8 @@ import 'package:myapp/screens/Historial/editar_movimiento_page.dart'; // Asegúr
 class HistorySquare extends StatelessWidget {
   final int id;
   final DateTime fecha;
-  final Tipo tipo;
-  final Categoria categoria;
+  final String tipo;
+  final String categoria;
   final double monto;
 
   HistorySquare({
@@ -51,9 +51,9 @@ class HistorySquare extends StatelessWidget {
             ),
             Text('Fecha: $fecha'),
             const SizedBox(height: 8),
-            Text('Tipo: ${tipo.name}'),
+            Text('Tipo: ${tipo}'),
             const SizedBox(height: 8),
-            Text('Categoria: ${categoria.name}'),
+            Text('Categoria: ${categoria}'),
             const SizedBox(height: 8),
             Text('Monto: $monto'),
           ],
