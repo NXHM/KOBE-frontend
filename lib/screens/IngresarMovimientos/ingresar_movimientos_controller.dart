@@ -38,10 +38,12 @@ class ingresar_movimientos_controller extends GetxController {
   }
 
   Categoria adaptarCategoria(Map<String, dynamic> json) {
+    print("json");
+    print(json);
     int id = json['id'];
     String name = json['name'];
-    int tipoId = json['tipo_id']; // Usar tipo_id del JSON recibido
-    double presupuesto = double.parse(json['presupuesto'].toString()); // Asegurar que presupuesto sea un double
+    int tipoId = json['type_id']; // Usar tipo_id del JSON recibido
+    double presupuesto = 1; // Asegurar que presupuesto sea un double
 
     // Buscar el Tipo correspondiente en la lista tipos
     Tipo? tipo = tipos.firstWhereOrNull((tipo) => tipo.id == tipoId);
@@ -63,7 +65,7 @@ class ingresar_movimientos_controller extends GetxController {
   
   final body = json.encode({
     'fecha': movimiento.fecha.toIso8601String(),
-    'tipo_id': movimiento.tipo.id,
+    'type_id': movimiento.tipo.id,
     'categoria_id': movimiento.categoria.id,
     'monto': movimiento.monto,
     'comentario': movimiento.comentario,
