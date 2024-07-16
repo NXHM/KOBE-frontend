@@ -1,3 +1,7 @@
+import 'Category.dart';
+import 'Month.dart';
+import 'User.dart';
+
 class Budget {
   int? id;
   double amount;

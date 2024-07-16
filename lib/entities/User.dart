@@ -1,3 +1,7 @@
+import 'Movement.dart';
+import 'Category.dart';
+import 'Budget.dart';
+
 class User {
   int? id;
   String name;

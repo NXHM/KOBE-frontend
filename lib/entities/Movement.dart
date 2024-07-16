@@ -1,3 +1,5 @@
+import 'Category.dart';
+import 'User.dart';
 class Movement {
   int? id;
   double amount;

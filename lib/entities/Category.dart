@@ -1,3 +1,8 @@
+import 'Budget.dart';
+import 'Movement.dart';
+import 'Type.dart';
+import 'User.dart';
+
 class Category {
   int? id;
   String name;
