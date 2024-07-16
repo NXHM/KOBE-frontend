@@ -38,9 +38,10 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
 
   final ingresar_movimientos_controller _controller = Get.put(ingresar_movimientos_controller());
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+@override
+Widget build(BuildContext context) {
+  return SingleChildScrollView(
+    child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Card(
@@ -293,6 +294,8 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+
 }
