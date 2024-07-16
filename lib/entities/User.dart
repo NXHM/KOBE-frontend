@@ -1,39 +1,43 @@
-// entities/User.dart
-
 class User {
   int? id;
-  String? name;
-  String? password;
-  String? username;
-  String? email;
-  String? tempCode;
+  String name;
+  String username;
+  String email;
+  String password;
+
+  // Relationships
+  List<Movement>? movements;
+  List<Category>? categories;
+  List<Budget>? budgets;
 
   User({
     this.id,
-    this.name,
-    this.password,
-    this.username,
-    this.email,
-    this.tempCode,
+    required this.name,
+    required this.username,
+    required this.email,
+    required this.password,
+    this.movements,
+    this.categories,
+    this.budgets,
   });
 
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    password = json['password'];
-    username = json['username'];
-    email = json['email'];
-    tempCode = json['tempCode'];
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'] as int?,
+      name: json['name'] as String,
+      username: json['username'] as String,
+      email: json['email'] as String,
+      password: json['password'] as String,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id; 
-    data['name'] = name;
-    data['password'] = password;
-    data['username'] = username;
-    data['email'] = email;
-    data['tempCode'] = tempCode;
-    return data;
+    return {
+      'id': id,
+      'name': name,
+      'username': username,
+      'email': email,
+      'password': password,
+    };
   }
 }
