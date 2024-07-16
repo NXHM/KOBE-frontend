@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:myapp/screens/Overview/components/build_table.dart';
 
 class OverviewValuesPage extends StatelessWidget {
-  final int month;
-  final int year;
   final List<List<Map<String, dynamic>>> data;
 
   const OverviewValuesPage({
     Key? key, 
-    required this.month,
-    required this.year,
     required this.data,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
-    List<Map<String,dynamic>> dataIngresos = data[0];
-    List<Map<String,dynamic>> dataGastos = data[1];
-    List<Map<String,dynamic>> dataAhorros = data[2];
-    
+  Widget build(BuildContext context){    
     return Container(
       child: Column(
         children: [
-          _buildProgressCardNumbers("Ingresos", dataIngresos),
+          data[0].isEmpty ? 
+          const SizedBox(height: 0)
+          :
+          Column(children: [
+            _buildProgressCardNumbers("Ingresos", data[0]),
           const SizedBox(height: 16),
-          _buildProgressCardNumbers("Gastos", dataGastos),
+          ],),
+          data[1].isEmpty ? 
+          const SizedBox(height: 0)
+          :
+          Column(children: [
+            _buildProgressCardNumbers("Gastos", data[1]),
           const SizedBox(height: 16),
-          _buildProgressCardNumbers("Ahorros", dataAhorros),
+          ],),
+          data[2].isEmpty ? 
+          const SizedBox(height: 0)
+          :
+          Column(children: [
+            _buildProgressCardNumbers("Ahorros", data[2]),
           const SizedBox(height: 16),
+          ],)
         ]
       )
     );
