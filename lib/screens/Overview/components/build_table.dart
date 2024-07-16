@@ -25,7 +25,7 @@ class buildTable extends StatelessWidget {
       rows: data.map((item) {
         return DataRow(
           cells: [
-            DataCell(Text(item["col1"].toString().substring(0, item["col1"].toString().length > 8 ? 10 : null)), ),
+            DataCell(Text(item["nombre_categoria"].toString().substring(0, item["nombre_categoria"].toString().length > 8 ? 10 : null)), ),
             DataCell(Center( child: Text(item["real"].toString(), style: boldStyle, textAlign: TextAlign.center,))),
             DataCell(Center( child: Text(item["planeado"].toString(), style: boldStyle, textAlign: TextAlign.center,))),
           ]

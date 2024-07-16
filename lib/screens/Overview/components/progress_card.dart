@@ -70,7 +70,7 @@ class _ProgressCardState extends State<ProgressCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Text(item["col1"].toString(), style: TextStyle(fontSize: 16,),),
+                  child: Text(item["nombre_categoria"].toString(), style: TextStyle(fontSize: 16,),),
                 ),
                 SizedBox(height: 4,),
                 ProgressBar(progress: progress, color:  widget.color,)

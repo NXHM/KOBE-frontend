@@ -5,15 +5,16 @@ import 'package:myapp/screens/signin/signUp.dart';
 import '../../controllers/singInController.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/signin/forgetPassword.dart';
-import 'package:myapp/screens/widgets/auth.dart';
 import 'package:myapp/screens/Home/homeSessioned.dart';
+import 'package:myapp/controllers/authController.dart';
+
 
 class SignIn extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final SignInController signInController = Get.put(SignInController());
   //final storage = FlutterSecureStorage();
-  final AuthService authService = AuthService();
+  final AuthController authController = Get.find<AuthController>();
   SignIn({super.key});
 
   @override
@@ -108,7 +109,7 @@ class SignIn extends StatelessWidget {
             );
             if (result.isSuccess) {
               // Guardar el token JWT
-              await authService.setToken(result.token!);
+              await authController.setToken(result.token!);
               // Navegar a la página de inicio
               Navigator.pushReplacement(context,
                   MaterialPageRoute<void>(builder: (context) => HomePageSessioned()));

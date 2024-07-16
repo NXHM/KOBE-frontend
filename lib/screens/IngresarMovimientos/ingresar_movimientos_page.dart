@@ -38,9 +38,10 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
 
   final ingresar_movimientos_controller _controller = Get.put(ingresar_movimientos_controller());
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+@override
+Widget build(BuildContext context) {
+  return SingleChildScrollView(
+    child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Card(
@@ -253,7 +254,7 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                       categoria: _selectedCategory!,
                       monto: _amount!,
                       comentario: _comment ?? '',
-                      usuario: User(id: 1, name: 'Usuario de ejemplo'), // Aquí deberías obtener el usuario actual
+                      usuario: User(id: 5, name: 'Flavio'), // Aquí deberías obtener el usuario actual
                     );
                     print("Objeto creado");
                     print(nuevoMovimiento);
@@ -293,6 +294,8 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+
 }
