@@ -62,7 +62,7 @@ class AuthWrapper extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data != null && snapshot.data!.isNotEmpty) {
+              if (snapshot.data != null && snapshot.data!.isNotEmpty) {                
                 return HomePageSessioned();
               } else {
                 return SignIn();
