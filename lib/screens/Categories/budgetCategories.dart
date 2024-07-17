@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myapp/screens/Categories/viewCategories.dart';
 import 'package:myapp/screens/Home/home_page.dart';
 import 'package:myapp/screens/components/category_square.dart';
 import 'package:myapp/screens/components/periodCategory.dart';
@@ -59,7 +60,8 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(
+                        builder: (context) => ViewCategoriesPage()),
                   ).then((_) {
                     // Esto se ejecuta cuando volvemos de la página de edición
                     budgetController.fetchGroupedBudgets(); // Refrescar datos
