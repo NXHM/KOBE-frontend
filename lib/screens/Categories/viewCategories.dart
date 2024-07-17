@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/controllers/category_controller.dart';
-import 'package:myapp/controllers/type_controller.dart';
 import 'package:myapp/screens/Home/home_page.dart';
 import 'create_category_page.dart';
 import 'edit_category_page.dart'; // Importa la nueva página
@@ -47,15 +46,11 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: () async {
-                final result = await Navigator.push(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CreateCategoryPage()),
                 );
-                if (result == true) {
-                  categoryController
-                      .fetchTiposCategorias(); // Refrescar datos después de volver de la página de creación
-                }
               },
               child: Text(
                 'Crear Nueva Categoría',
@@ -128,8 +123,10 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
                                         IconButton(
                                           icon: Icon(Icons.delete),
                                           onPressed: () {
-                                            //categoryController
-                                            //.deleteCategory(categoria);
+                                            int categoryId = categoria[
+                                                'id']; // Obtener el ID de la categoría
+                                            categoryController
+                                                .deleteCategory(categoryId);
                                           },
                                         ),
                                       ],
