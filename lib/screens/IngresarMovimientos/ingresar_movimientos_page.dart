@@ -1,9 +1,11 @@
+/*import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myapp/entities/models.dart';
 import 'ingresar_movimientos_controller.dart';
-import '../../entities/Tipo.dart';
-import '../../entities/Categoria.dart';
-import '../../entities/Movimiento.dart';
+import '../../entities/Type.dart';
+import '../../entities/Category.dart';
+import '../../entities/Movement.dart';
 import '../../entities/User.dart';
 
 class MyApp extends StatelessWidget {
@@ -31,8 +33,8 @@ class ingresar_movimientos_page extends StatefulWidget {
 class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
   final _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
-  Tipo? _selectedType;
-  Categoria? _selectedCategory;
+  Type? _selectedType;
+  C _selectedCategory;
   double? _amount;
   String? _comment;
 
@@ -109,7 +111,7 @@ Widget build(BuildContext context) {
                   SizedBox(height: 10),
                   Text('Tipo'),
                   SizedBox(height: 5),
-                  Obx(() => DropdownButtonFormField<Tipo>(
+                  Obx(() => DropdownButtonFormField<Type>(
                         decoration: InputDecoration(
                           hintText: 'Ingrese el tipo',
                           alignLabelWithHint: true,
@@ -122,8 +124,8 @@ Widget build(BuildContext context) {
                           _controller.setSelectedTipo(newValue);
                           _selectedCategory = null; // Reiniciar categoría al cambiar el tipo
                         },
-                        items: _controller.tipos.map((Tipo tipo) {
-                          return DropdownMenuItem<Tipo>(
+                        items: _controller.tipos.map((Type tipo) {
+                          return DropdownMenuItem<Type>(
                             value: tipo,
                             child: Text(tipo.name),
                           );
@@ -139,7 +141,7 @@ Widget build(BuildContext context) {
                   Text('Categoría'),
                   SizedBox(height: 5),
                   Obx(() {
-                    return DropdownButtonFormField<Categoria>(
+                    return DropdownButtonFormField<Category>(
                       decoration: InputDecoration(
                         hintText: 'Ingrese la categoría',
                         alignLabelWithHint: true,
@@ -299,3 +301,4 @@ Widget build(BuildContext context) {
 }
 
 }
+*/

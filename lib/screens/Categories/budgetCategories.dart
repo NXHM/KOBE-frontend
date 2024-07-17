@@ -24,13 +24,11 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
   void initState() {
     super.initState();
     monthNotifier.addListener(() {
-      budgetController.fetchGroupedBudgets(
-          month_id: monthNotifier
-              .value); // Actualiza los presupuestos cuando cambie el mes
+      budgetController
+          .fetchGroupedBudgets(); // Actualiza los presupuestos cuando cambie el mes
     });
-    budgetController.fetchGroupedBudgets(
-        month_id:
-            monthNotifier.value); // Llama al controlador con el mes inicial
+    budgetController
+        .fetchGroupedBudgets(); // Llama al controlador con el mes inicial
   }
 
   @override
@@ -62,8 +60,7 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
                     MaterialPageRoute(builder: (context) => HomePage()),
                   ).then((_) {
                     // Esto se ejecuta cuando volvemos de la página de edición
-                    budgetController.fetchGroupedBudgets(
-                        month_id: monthNotifier.value); // Refrescar datos
+                    budgetController.fetchGroupedBudgets(); // Refrescar datos
                   });
                 },
               ),
@@ -76,7 +73,7 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
           Flexible(
             child: Obx(() {
               if (budgetController.groupedBudgets.isEmpty) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: Text("Is Empty"));
               } else {
                 return ListView.builder(
                   shrinkWrap: true,

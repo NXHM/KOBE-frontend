@@ -5,12 +5,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SignUpController extends GetxController {
-  var statusMessage = ''.obs; // Usamos status message para que vea pantallas de estado
+  var statusMessage =
+      ''.obs; // Usamos status message para que vea pantallas de estado
 
   // Metodo para crear usuario
-  Future<void> createUser(String name, String username, String email, String password, String confirmPassword) async {
-    if (username.isNotEmpty && password.isNotEmpty && name.isNotEmpty && email.isNotEmpty) {
-      const url = 'https://906b-191-98-138-140.ngrok-free.app/api/createUser'; // Reemplaza <ngrok_url> con la URL generada por ngrok
+  Future<void> createUser(String name, String username, String email,
+      String password, String confirmPassword) async {
+    if (username.isNotEmpty &&
+        password.isNotEmpty &&
+        name.isNotEmpty &&
+        email.isNotEmpty) {
+      const url =
+          'http://localhost:3000/api/createUser'; // Reemplaza <ngrok_url> con la URL generada por ngrok
       final response = await http.post(
         Uri.parse(url),
         headers: {

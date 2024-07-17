@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePageSessioned> {
       case 1:
         return BudgetCategories();
       case 2:
-        return ingresar_movimientos_page();
+        return BudgetCategories();
       case 3:
         return BudgetCategories();
       case 4:
