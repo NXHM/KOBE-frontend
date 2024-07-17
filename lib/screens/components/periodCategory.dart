@@ -5,8 +5,8 @@ import 'package:myapp/entities/Month.dart';
 
 class PeriodCategory extends StatefulWidget {
   final ValueNotifier<int> monthNotifier; // Añadir ValueNotifier
-
-  PeriodCategory({required this.monthNotifier});
+  final ValueNotifier<int> yearNotifier;
+  PeriodCategory({required this.monthNotifier, required this.yearNotifier});
 
   @override
   State<PeriodCategory> createState() => _PeriodCategoryState();
@@ -25,16 +25,21 @@ class _PeriodCategoryState extends State<PeriodCategory> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           DropdownButton<int>(
-            value:
-                2024, // Puedes cambiar esto a un valor dinámico si es necesario
-            items: [2024, 2025, 2026].map((year) {
+            value: _controller.year_selected
+                .value, // Puedes cambiar esto a un valor dinámico si es necesario
+            items: _controller.years.map((year) {
               return DropdownMenuItem<int>(
                 value: year,
                 child: Text(year.toString()),
               );
             }).toList(),
             onChanged: (int? newYear) {
-              // Lógica para cambiar el año
+              setState(() {
+                _controller.year_selected.value = newYear!;
+                print(_controller.year_selected.value);
+                widget.yearNotifier.value =
+                    newYear; // Notificar el cambio de month_id
+              });
             },
           ),
           SizedBox(width: 16),

@@ -17,12 +17,8 @@ class BudgetController extends GetxController {
         'Fetching grouped budgets for month_id: ${monthController.id_selected.value}');
     final response = await http.get(
       Uri.parse(
-          'http://localhost:3000/api/presupuestos/tipo?month_id=${monthController.id_selected.value}'), // Pasar el parámetro month_id en la URL
-      headers: {
-        "Authorization":
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZiIsImlkIjoxLCJpYXQiOjE3MjExODE3MTAsImV4cCI6MTcyMTE4NTMxMH0.dAIhKXzeUAWia2K_pKHJumWsjOKID-OHnGzEYrAqQ8c",
-        'Content-Type': 'application/json'
-      },
+          'http://localhost:3000/api/presupuestos/tipo?month_id=${monthController.id_selected.value}&year=${monthController.year_selected.value}'), // Pasar el parámetro month_id en la URL
+      headers: {"Authorization": token!, 'Content-Type': 'application/json'},
     );
     print(response.statusCode);
     if (response.statusCode == 404) {

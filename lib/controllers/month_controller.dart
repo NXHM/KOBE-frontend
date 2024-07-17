@@ -9,6 +9,8 @@ class MonthController extends GetxController {
   var months = <Month>[].obs;
   AuthController authController = Get.put(AuthController());
   RxInt id_selected = 1.obs;
+  RxInt year_selected = 2024.obs;
+  var years = [2024, 2025, 2026];
 
   @override
   void onInit() {

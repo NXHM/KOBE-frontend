@@ -12,18 +12,20 @@ class BudgetCategories extends StatefulWidget {
 }
 
 class _BudgetCategoriesState extends State<BudgetCategories> {
-  int day = DateTime.now().day;
-  int month = DateTime.now().month;
-  int year = DateTime.now().year;
-
   final BudgetController budgetController = Get.put(BudgetController());
   final ValueNotifier<int> monthNotifier =
       ValueNotifier<int>(DateTime.now().month); // Inicializar ValueNotifier
+  final ValueNotifier<int> yearNotifier =
+      ValueNotifier<int>(DateTime.now().year);
 
   @override
   void initState() {
     super.initState();
     monthNotifier.addListener(() {
+      budgetController
+          .fetchGroupedBudgets(); // Actualiza los presupuestos cuando cambie el mes
+    });
+    yearNotifier.addListener(() {
       budgetController
           .fetchGroupedBudgets(); // Actualiza los presupuestos cuando cambie el mes
     });
@@ -67,8 +69,9 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
             ],
           ),
           PeriodCategory(
-              monthNotifier:
-                  monthNotifier), // Pasar el ValueNotifier al PeriodCategory
+            monthNotifier: monthNotifier,
+            yearNotifier: yearNotifier,
+          ), // Pasar el ValueNotifier al PeriodCategory
           const SizedBox(height: 16),
           Flexible(
             child: Obx(() {
