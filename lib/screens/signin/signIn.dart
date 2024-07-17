@@ -8,7 +8,6 @@ import 'package:myapp/screens/signin/forgetPassword.dart';
 import 'package:myapp/screens/Home/homeSessioned.dart';
 import 'package:myapp/controllers/authController.dart';
 
-
 class SignIn extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -20,28 +19,40 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 25),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'assets/images/Kobey-logo.jpeg',
-                      fit: BoxFit.cover,
-                      width: 200.0,
-                      height: 200.0,
-                    ),
-                  ),
+      body: CustomScrollView(
+        slivers: [
+          const SliverAppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            pinned: false,
+            floating: false,
+            expandedHeight: 0,
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(25.0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    double logoSize = constraints.maxWidth;
+                    logoSize = logoSize.clamp(180.0, 250.0);
+                    
+                    return Center(
+                      child: Container(
+                        width: logoSize,
+                        height: logoSize,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/images/Kobey-logo.jpeg'),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
+                const SizedBox(height: 25),
                 _inputField(context),
                 _button(context),
                 _linksLogin(context),
@@ -54,10 +65,10 @@ class SignIn extends StatelessWidget {
                             : Colors.red,
                       ),
                     )),
-              ],
+              ]),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

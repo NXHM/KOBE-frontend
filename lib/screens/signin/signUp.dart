@@ -19,28 +19,40 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 25),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'assets/images/Kobey-logo.jpeg',
-                      fit: BoxFit.cover,
-                      width: 200.0,
-                      height: 200.0,
-                    ),
-                  ),
+      body: CustomScrollView(
+        slivers: [
+          const SliverAppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            pinned: false,
+            floating: false,
+            expandedHeight: 0,
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(25.0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    double logoSize = constraints.maxWidth;
+                    logoSize = logoSize.clamp(180.0, 250.0);
+
+                    return Center(
+                      child: Container(
+                        width: logoSize,
+                        height: logoSize,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/images/Kobey-logo.jpeg'),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
+                const SizedBox(height: 25),
                 _inputField(context),
                 _button(context),
                 _linksLogin(context),
@@ -53,10 +65,10 @@ class SignUp extends StatelessWidget {
                             : Colors.red,
                       ),
                     )),
-              ],
+              ]),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -163,12 +175,22 @@ class SignUp extends StatelessWidget {
               Navigator.pushReplacement(context,
                   MaterialPageRoute<void>(builder: (context) => SignIn()));
             },
-            child: const Text(
-              '¿Ya tiene una cuenta? Inicie sesión',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Colors.black,
+            child: RichText(
+              text: const TextSpan(
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+                children: [
+                  TextSpan(
+                    text: '¿Ya tiene una cuenta? ',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  TextSpan(
+                    text: 'Inicie sesión',
+                    style: TextStyle(color: TDColors.blueLogo),
+                  ),
+                ],
               ),
             ),
           ),
