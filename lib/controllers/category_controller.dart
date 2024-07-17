@@ -8,8 +8,10 @@ import 'package:myapp/controllers/authController.dart';
 class CategoryController extends GetxController {
   var groupedCategory = <String, List<Map<String, dynamic>>>{}.obs;
   AuthController authController = Get.put(AuthController());
+  var name_category = "".obs;
 
   Future<void> fetchTiposCategorias() async {
+    groupedCategory.clear();
     var token = await authController.getToken();
     final response = await http.get(
         Uri.parse('http://localhost:3000/api/categoriasTipo'),

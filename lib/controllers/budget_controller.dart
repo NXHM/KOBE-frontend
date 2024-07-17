@@ -8,6 +8,7 @@ class BudgetController extends GetxController {
   var groupedBudgets = <String, List<Map<String, dynamic>>>{}.obs;
   AuthController authController = Get.put(AuthController());
   MonthController monthController = Get.put(MonthController());
+  var presupuesto = 0.0.obs;
 
   Future<void> fetchGroupedBudgets() async {
     groupedBudgets.clear();
@@ -46,5 +47,37 @@ class BudgetController extends GetxController {
 
     groupedBudgets.value = groupedData;
     print('Grouped budgets updated');
+  }
+
+  Future<void> createBudget({
+    required double amount,
+    required int year,
+    required int month_id,
+    required String category_name,
+    required int type_id,
+  }) async {
+    var token = await authController.getToken();
+    final response = await http.post(
+      Uri.parse('http://localhost:3000/api/createBudget'),
+      headers: {
+        "Authorization": token!,
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'amount': amount,
+        'year': year,
+        'month_id': month_id,
+        'category_name': category_name,
+        'type_id': type_id,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      print('Budget created successfully: ${response.body}');
+      Get.snackbar('Success', 'Budget created successfully');
+    } else {
+      print('Error creating budget: ${response.statusCode}');
+      Get.snackbar('Error', 'Failed to create budget');
+    }
   }
 }
