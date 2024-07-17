@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'category_controller.dart';
 import 'package:myapp/screens/Overview/components/period_selector.dart';
-import '../../entities/Categoria.dart';
+import '../../entities/Category.dart';
 
 class EditCategoryPage extends StatefulWidget {
-  final Categoria categoria;
+  final Category categoria;
 
   EditCategoryPage({required this.categoria});
 
@@ -27,9 +27,8 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
   @override
   void initState() {
     super.initState();
-    _selectedTipo = widget.categoria.tipo.name;
+
     _nombreCategoria = widget.categoria.name;
-    _presupuesto = widget.categoria.presupuesto;
   }
 
   void changeMonth(int m) {
@@ -165,14 +164,11 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // Editar la categoría existente
-                    var tipo = _controller.types.firstWhere((tipo) => tipo.name == _selectedTipo);
-                    var editedCategory = Categoria(
-                      id: widget.categoria.id,
-                      name: _nombreCategoria,
-                      tipo: tipo,
-                      presupuesto: _presupuesto,
-                    );
-                    _controller.updateCategory(editedCategory);
+                    var tipo = _controller.types
+                        .firstWhere((tipo) => tipo.name == _selectedTipo);
+                    /*var editedCategory = Categoria(
+                        id: widget.categoria.id, name: _nombreCategoria);
+                    _controller.updateCategory(editedCategory);*/
 
                     Navigator.pop(context);
                   }
@@ -181,7 +177,8 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 0, 20, 60),
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 64, vertical: 16), // Agrandar el botón
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 64, vertical: 16), // Agrandar el botón
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -194,3 +191,4 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
     );
   }
 }
+*/

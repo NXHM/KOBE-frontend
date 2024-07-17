@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/screens/Categories/category_controller.dart';
-import 'package:myapp/screens/Overview/components/period_selector.dart';
+import 'package:myapp/screens/Home/home_page.dart';
 import 'package:myapp/screens/components/category_square.dart';
-import 'viewCategories.dart'; // Importa la página ViewCategoriesPage
+import 'package:myapp/screens/components/periodCategory.dart';
+import 'package:myapp/controllers/budget_controller.dart'; // Importar BudgetController
+// Importa la página ViewCategoriesPage
 
 class BudgetCategories extends StatefulWidget {
   @override
@@ -15,18 +16,25 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
   int month = DateTime.now().month;
   int year = DateTime.now().year;
 
-  final CategoryController controller = Get.put(CategoryController());
+  final BudgetController budgetController = Get.put(BudgetController());
+  final ValueNotifier<int> monthNotifier =
+      ValueNotifier<int>(DateTime.now().month); // Inicializar ValueNotifier
 
-  void changeMonth(int m) {
-    setState(() {
-      month = m;
+  @override
+  void initState() {
+    super.initState();
+    monthNotifier.addListener(() {
+      budgetController
+          .fetchGroupedBudgets(); // Actualiza los presupuestos cuando cambie el mes
     });
+    budgetController
+        .fetchGroupedBudgets(); // Llama al controlador con el mes inicial
   }
 
-  void changeYear(int y) {
-    setState(() {
-      year = y;
-    });
+  @override
+  void dispose() {
+    monthNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,40 +57,40 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ViewCategoriesPage()),
+                    MaterialPageRoute(builder: (context) => HomePage()),
                   ).then((_) {
                     // Esto se ejecuta cuando volvemos de la página de edición
-                    setState(() {});
+                    budgetController.fetchGroupedBudgets(); // Refrescar datos
                   });
                 },
               ),
             ],
           ),
-          PeriodSelector(
-            day: day,
-            month: month,
-            year: year,
-            showPercentages: true,
-            changeMonth: changeMonth,
-            changeYear: changeYear,
-          ),
+          PeriodCategory(
+              monthNotifier:
+                  monthNotifier), // Pasar el ValueNotifier al PeriodCategory
           const SizedBox(height: 16),
           Flexible(
             child: Obx(() {
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: controller.types.length,
-                itemBuilder: (context, index) {
-                  var type = controller.types[index];
-                  var categories = controller.categories
-                      .where((categoria) => categoria.tipo.id == type.id)
-                      .toList();
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CategorySquare(tipo: type, categorias: categories),
-                  );
-                },
-              );
+              if (budgetController.groupedBudgets.isEmpty) {
+                return Center(child: Text("Is Empty"));
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: budgetController.groupedBudgets.length,
+                  itemBuilder: (context, index) {
+                    var entry = budgetController.groupedBudgets.entries
+                        .elementAt(index);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CategorySquare(
+                        tipo: entry.key,
+                        categorias: entry.value,
+                      ),
+                    );
+                  },
+                );
+              }
             }),
           ),
         ],
