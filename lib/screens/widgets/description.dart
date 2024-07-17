@@ -13,6 +13,7 @@ class Description extends StatelessWidget {
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
+          color: Color(0xFF121212),
         ),
       ),
     );

@@ -33,14 +33,14 @@ class EnterCode extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TitleInitialPages(title: 'Ingresar Código'),
-            Description(
+            const TitleInitialPages(title: 'Ingresar Código'),
+            const Description(
                 description:
                     'Ingresa el código enviado a la dirección de correo electrónico para cambiar su contraseña.'),
             _inputFieldCode(context),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _submitButton(context),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Obx(() => Text(
                   enterCodeController.statusMessage.value,
                   style: TextStyle(
@@ -73,24 +73,30 @@ class EnterCode extends StatelessWidget {
   }
 
   Widget _submitButton(BuildContext context) {
-    return Center(
+    return SizedBox(
+      width: double.infinity, // Makes the button take full width
       child: ElevatedButton(
         onPressed: () async {
-          await enterCodeController.validateCode(email, _enterCodeController.text);
-          if (enterCodeController.statusMessage.value == "Code validated successfully") {
+          await enterCodeController.validateCode(
+              email, _enterCodeController.text);
+          if (enterCodeController.statusMessage.value ==
+              "Code validated successfully") {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => NewPassword(email: email)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NewPassword(email: email)));
           }
         },
-        child: Text('Validar Código'),
+        
         style: ElevatedButton.styleFrom(
           backgroundColor: TDColors.blueLogo,
           foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          padding: const EdgeInsets.symmetric(vertical: 15),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
+            borderRadius: BorderRadius.circular(8.0), // Adjusted to match image
           ),
         ),
+        child: const Text('Validar Código'),
       ),
     );
   }

@@ -11,7 +11,7 @@ class TitleInitialPages extends StatelessWidget {
       child: Text(
         title,
         style: const TextStyle(
-          fontSize: 30,
+          fontSize: 32,
           fontWeight: FontWeight.w900,
         ),
       ),
