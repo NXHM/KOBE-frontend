@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'category_controller.dart';
 import '../../entities/Categoria.dart';
@@ -150,29 +150,34 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20), // Añadir espacio entre el formulario y el botón
+              const SizedBox(
+                  height: 20), // Añadir espacio entre el formulario y el botón
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Crear la nueva categoría y agregarla a la lista
-                      var tipo = _controller.types.firstWhere((tipo) => tipo.name == _selectedTipo);
-                      var newCategory = Categoria(
+                      var tipo = _controller.types
+                          .firstWhere((tipo) => tipo.name == _selectedTipo);
+                      /*var newCategory = Categoria(
                         id: DateTime.now().millisecondsSinceEpoch,
                         name: _nombreCategoria,
                         tipo: tipo,
                         presupuesto: _presupuesto,
                       );
                       _controller.addCategory(newCategory);
-
+*/
                       Navigator.pop(context);
                     }
                   },
                   child: Text('Listo', style: TextStyle(fontSize: 20)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 0, 20, 60), // Cambiado a backgroundColor
+                    backgroundColor: Color.fromARGB(
+                        255, 0, 20, 60), // Cambiado a backgroundColor
                     foregroundColor: Colors.white, // Cambiado a foregroundColor
-                    padding: EdgeInsets.symmetric(horizontal: 64, vertical: 16), // Aumentar tamaño del botón
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 64,
+                        vertical: 16), // Aumentar tamaño del botón
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -186,3 +191,4 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
     );
   }
 }
+*/
