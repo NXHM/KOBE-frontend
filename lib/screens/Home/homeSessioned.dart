@@ -62,19 +62,25 @@ class _HomePageState extends State<HomePageSessioned> {
   }
 
   Widget _buildContent() {
-    switch(_selectedIndex) {
-      case 0: 
-        return overviewPage(showPercentages: showPercentages,);
+    switch (_selectedIndex) {
+      case 0:
+        return overviewPage(
+          showPercentages: showPercentages,
+        );
       case 1:
         return BudgetCategories();
       case 2:
         return ingresar_movimientos_page();
       case 3:
-        return HistorialPage();
+        return BudgetCategories();
       case 4:
-        return overviewPage(showPercentages: showPercentages,);
+        return overviewPage(
+          showPercentages: showPercentages,
+        );
       default:
-        return overviewPage(showPercentages: showPercentages,);
+        return overviewPage(
+          showPercentages: showPercentages,
+        );
     }
   }
 
@@ -111,7 +117,11 @@ class _HomePageState extends State<HomePageSessioned> {
           label: "Presupuestos",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.add_circle, size: 72,color: Color.fromARGB(255, 0, 20, 60),),
+          icon: Icon(
+            Icons.add_circle,
+            size: 72,
+            color: Color.fromARGB(255, 0, 20, 60),
+          ),
           label: "Ingresar Movimientos",
         ),
         BottomNavigationBarItem(
@@ -131,11 +141,14 @@ class _HomePageState extends State<HomePageSessioned> {
       onTap: _onItemTapped,
     );
   }
-  
+
   PreferredSizeWidget _overviewAppBar() {
     return AppBar(
-      title: Text(_title,
-        style: const TextStyle(fontWeight: FontWeight.bold,),
+      title: Text(
+        _title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
       ),
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
@@ -157,23 +170,28 @@ class _HomePageState extends State<HomePageSessioned> {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return AppBar( 
-      title: Text(_title,
-        style: const TextStyle(fontWeight: FontWeight.bold,),
+    return AppBar(
+      title: Text(
+        _title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
       ),
       backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
       centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios),
-        onPressed: () {_onItemTapped(0);},
+        onPressed: () {
+          _onItemTapped(0);
+        },
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
       appBar: _selectedIndex == 0 ? _overviewAppBar() : _buildAppBar(),
       body: Container(
         color: Color(0xFFEBEDF0),
