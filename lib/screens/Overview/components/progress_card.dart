@@ -24,47 +24,52 @@ class _ProgressCardState extends State<ProgressCard> {
   Widget build(BuildContext context) {
     double progress = calculateProgress(widget.data);
 
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16,4,16,16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(widget.type, style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                  }, 
-                  icon: Icon(_isExpanded ? Icons.expand_less : Icons.expand_more))
-              ],
-            ),
-            !_isExpanded ? ProgressBar(progress: progress, color:  widget.color,) :  _buildExpandedProgressBars(widget.data)
-          ],
+    if (budgetExists(widget.data)) {
+      return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16,4,16,16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(widget.type, style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    }, 
+                    icon: Icon(_isExpanded ? Icons.expand_less : Icons.expand_more))
+                ],
+              ),
+              !_isExpanded ?
+                  ProgressBar(progress: progress, color:  widget.color,)
+              :
+                _buildExpandedProgressBars(widget.data)
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return const SizedBox(height: 0);
+    }
   }
 
   Widget _buildExpandedProgressBars (List<Map<String,dynamic>> data) {
     double progress = 0;
-    print(data);
 
     return Column(
         children: data.map((item) {
-          if(item["real"] > 0){
+          if(item["planeado"] > 0){
             progress = item["real"]/item["planeado"];
-          }
-          return Padding(
+            return Padding(
             padding: item == data[data.length - 1] ? EdgeInsets.only(bottom: 0) : EdgeInsets.only(bottom: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,12 +77,15 @@ class _ProgressCardState extends State<ProgressCard> {
                 Center(
                   child: Text(item["nombre_categoria"].toString(), style: TextStyle(fontSize: 16,),),
                 ),
-                SizedBox(height: 4,),
+                const SizedBox(height: 4,),
                 ProgressBar(progress: progress, color:  widget.color,)
               ],
             ),
           );
-        }).toList(),
+          } else {
+            return SizedBox(height: 0,);
+          }
+        }).toList()
     );
   }
 
@@ -101,5 +109,16 @@ class _ProgressCardState extends State<ProgressCard> {
     }else x = 0;
 
     return x >= 1 ? 1 : x;
+  }
+
+  bool budgetExists(List<Map<String,dynamic>> data) {
+    int planeado = 0;
+
+    for(int i = 0; i < data.length; i++){
+      Map<String, dynamic>item = data[i];
+      planeado = item["planeado"];
+    }
+
+    return planeado > 0 ? true : false;
   }
 }

@@ -22,7 +22,7 @@ class buildTable extends StatelessWidget {
           child: Text("Planeado", style: boldStyle,)
         )),
       ],
-      rows: data.map((item) {
+      rows: data.where((item) => item["planeado"] != 0).map((item) {
         return DataRow(
           cells: [
             DataCell(Text(item["nombre_categoria"].toString().substring(0, item["nombre_categoria"].toString().length > 8 ? 10 : null)), ),

@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:myapp/controllers/month_controller.dart';
+import 'package:myapp/entities/Month.dart';
 
 class PeriodSelector extends StatefulWidget {
   final bool? showPercentages;
   final int day;
-  final int month;
-  final int year;
-  final Function(int) changeMonth;
-  final Function(int) changeYear;
-  /* final VoidCallback changeMonth;
-  final VoidCallback changeYear; */
+  final ValueNotifier<int> monthNotifier;
+  final ValueNotifier<int> yearNotifier;
 
   const PeriodSelector({
     Key? key,
     required this.showPercentages,
     required this.day,
-    required this.month,
-    required this.year,
-    required this.changeMonth,
-    required this.changeYear,
+    required this.monthNotifier,
+    required this.yearNotifier
   }) : super(key: key);
 
   @override
@@ -25,10 +22,7 @@ class PeriodSelector extends StatefulWidget {
 }
 
 class _PeriodSelectorState extends State<PeriodSelector> {
-  final Map<int, String> months ={ 
-    1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril", 5: "Mayo", 6: "Junio", 7: "Julio",
-    8: "Agosto", 9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre",
-  };
+  final MonthController _controller = Get.put(MonthController());
 
   @override
   Widget build(BuildContext context) {
@@ -36,47 +30,50 @@ class _PeriodSelectorState extends State<PeriodSelector> {
       fontSize: 20,
       fontWeight: FontWeight.bold,
     );
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Periodo Seleccionado", style: encabezado,),
-            SizedBox(height: 8,),
-            _buildCalendarButtons(),
-            SizedBox(height: 8,),
-            Text("Progreso del Periodo", style: encabezado,),
-            SizedBox(height: 8,),
-            _buildProgressBox(widget.year, widget.month, widget.day),
-          ],
+    return Obx((){
+      if (_controller.months.isEmpty) {
+        return Center(child: CircularProgressIndicator(),);
+      }
+      return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Periodo Seleccionado", style: encabezado,),
+              SizedBox(height: 8,),
+              _buildCalendarButtons(widget.yearNotifier , widget.monthNotifier, _controller),
+              SizedBox(height: 8,),
+              Text("Progreso del Periodo", style: encabezado,),
+              SizedBox(height: 8,),
+              _buildProgressBox(widget.yearNotifier.value, widget.monthNotifier.value, widget.day),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Widget _buildCalendarButtons() {
+  Widget _buildCalendarButtons(ValueNotifier yearNotifier, ValueNotifier monthNotifier, MonthController controller) {
     return Row(
       children: [
         Expanded(
           child: DropdownButtonFormField<int>(
-            value: widget.year,
-            onChanged: (int? value) {widget.changeYear(value!);},
+            value: widget.yearNotifier.value,
+            onChanged: (int? value) {widget.yearNotifier.value = value!;},
             dropdownColor: Colors.white,
-            items: <int>[
-              2022,
-              2023,
-              2024,
-              2025,
-              2026,
-              2027,
-              // Agrega más años según sea necesario
-            ].map<DropdownMenuItem<int>>((int value) {
+            isExpanded: true,
+            items: controller.years.map((year) {
               return DropdownMenuItem<int>(
-                value: value,
-                child: Text(value.toString(),),
+                value: year,
+                child: Text(
+                  year.toString(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               );
             }).toList(),
           ),
@@ -84,35 +81,23 @@ class _PeriodSelectorState extends State<PeriodSelector> {
         SizedBox(width: 8),
         Expanded(
           child: DropdownButtonFormField<int>(
-            value: widget.month,
-            onChanged: (int? value) {widget.changeMonth(value!);},
+            value: widget.monthNotifier.value,
+            onChanged: (int? value) {widget.monthNotifier.value = value!;},
             dropdownColor: Colors.white,
-            items: months.keys.map((int key) {
+            items: controller.months.map((Month month) {
               return DropdownMenuItem<int>(
-                value: key,
-                child: Text(months[key]!,),
+                value: month.id,
+                child: Text(
+                  month.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),
+                )
               );
             }).toList(),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildPeriodButton(String text) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Center(
-          child: Text(text, style: TextStyle(
-            fontSize: 16,
-          ),),
-        ),
-      ) 
     );
   }
 
