@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/screens/Home/home_page.dart';
+import 'package:myapp/screens/Categories/viewCategories.dart';
 import 'package:myapp/screens/components/category_square.dart';
 import 'package:myapp/screens/components/periodCategory.dart';
 import 'package:myapp/controllers/budget_controller.dart'; // Importar BudgetController
-// Importa la página ViewCategoriesPage
 
 class BudgetCategories extends StatefulWidget {
   @override
@@ -12,28 +11,33 @@ class BudgetCategories extends StatefulWidget {
 }
 
 class _BudgetCategoriesState extends State<BudgetCategories> {
-  int day = DateTime.now().day;
-  int month = DateTime.now().month;
-  int year = DateTime.now().year;
-
   final BudgetController budgetController = Get.put(BudgetController());
   final ValueNotifier<int> monthNotifier =
       ValueNotifier<int>(DateTime.now().month); // Inicializar ValueNotifier
+  final ValueNotifier<int> yearNotifier =
+      ValueNotifier<int>(DateTime.now().year);
 
   @override
   void initState() {
     super.initState();
-    monthNotifier.addListener(() {
-      budgetController
-          .fetchGroupedBudgets(); // Actualiza los presupuestos cuando cambie el mes
-    });
-    budgetController
-        .fetchGroupedBudgets(); // Llama al controlador con el mes inicial
+    monthNotifier.addListener(_fetchGroupedBudgets);
+    yearNotifier.addListener(_fetchGroupedBudgets);
+    _fetchGroupedBudgets(); // Llama al controlador con el mes inicial
+  }
+
+  void _fetchGroupedBudgets() {
+    budgetController.fetchGroupedBudgets(
+      monthId: monthNotifier.value,
+      year: yearNotifier.value,
+    );
   }
 
   @override
   void dispose() {
+    monthNotifier.removeListener(_fetchGroupedBudgets);
+    yearNotifier.removeListener(_fetchGroupedBudgets);
     monthNotifier.dispose();
+    yearNotifier.dispose();
     super.dispose();
   }
 
@@ -57,18 +61,20 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(
+                        builder: (context) => ViewCategoriesPage()),
                   ).then((_) {
                     // Esto se ejecuta cuando volvemos de la página de edición
-                    budgetController.fetchGroupedBudgets(); // Refrescar datos
+                    _fetchGroupedBudgets(); // Refrescar datos
                   });
                 },
               ),
             ],
           ),
           PeriodCategory(
-              monthNotifier:
-                  monthNotifier), // Pasar el ValueNotifier al PeriodCategory
+            monthNotifier: monthNotifier,
+            yearNotifier: yearNotifier,
+          ), // Pasar el ValueNotifier al PeriodCategory
           const SizedBox(height: 16),
           Flexible(
             child: Obx(() {

@@ -1,8 +1,11 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'category_controller.dart';
-import '../../entities/Categoria.dart';
-import 'package:myapp/screens/Overview/components/period_selector.dart';
+import 'package:myapp/controllers/budget_controller.dart';
+import 'package:myapp/controllers/category_controller.dart';
+import 'package:myapp/controllers/type_controller.dart';
+import 'package:myapp/controllers/month_controller.dart';
+import 'package:myapp/screens/components/periodCategory.dart';
+import 'package:myapp/screens/components/budgetForm.dart';
 
 class CreateCategoryPage extends StatefulWidget {
   @override
@@ -10,26 +13,31 @@ class CreateCategoryPage extends StatefulWidget {
 }
 
 class _CreateCategoryPageState extends State<CreateCategoryPage> {
-  int day = DateTime.now().day;
-  int month = DateTime.now().month;
-  int year = DateTime.now().year;
-
-  final CategoryController _controller = Get.put(CategoryController());
+  final ValueNotifier<int> monthNotifier =
+      ValueNotifier<int>(DateTime.now().month);
+  final ValueNotifier<int> yearNotifier =
+      ValueNotifier<int>(DateTime.now().year);
+  final ValueNotifier<int> typeNotifier = ValueNotifier<int>(1);
+  final BudgetController budgetController = Get.put(BudgetController());
+  final CategoryController categoryController = Get.put(CategoryController());
+  final TypeController typeController = Get.put(TypeController());
+  final MonthController monthController = Get.put(MonthController());
   final _formKey = GlobalKey<FormState>();
-  String _selectedTipo = 'Ingreso';
-  String _nombreCategoria = '';
-  double _presupuesto = 0;
 
-  void changeMonth(int m) {
-    setState(() {
-      month = m;
+  @override
+  void initState() {
+    super.initState();
+    typeNotifier.addListener(() {
+      typeController.fetchTypes();
     });
   }
 
-  void changeYear(int y) {
-    setState(() {
-      year = y;
-    });
+  @override
+  void dispose() {
+    monthNotifier.dispose();
+    typeNotifier.dispose();
+    yearNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,13 +66,9 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              PeriodSelector(
-                day: day,
-                month: month,
-                year: year,
-                showPercentages: true,
-                changeMonth: changeMonth,
-                changeYear: changeYear,
+              PeriodCategory(
+                monthNotifier: monthNotifier,
+                yearNotifier: yearNotifier,
               ),
               const SizedBox(height: 16),
               Card(
@@ -74,110 +78,39 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                 color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Tipo de Movimiento'),
-                        const SizedBox(height: 5),
-                        DropdownButtonFormField<String>(
-                          value: _selectedTipo,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedTipo = newValue!;
-                            });
-                          },
-                          items: ['Ingreso', 'Gasto', 'Ahorro']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Nombre de Categoría'),
-                        const SizedBox(height: 5),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Ej. Transporte',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            _nombreCategoria = value;
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese el nombre de la categoría';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Presupuesto (mensual)'),
-                        const SizedBox(height: 5),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Ej. 100',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            _presupuesto = double.tryParse(value) ?? 0;
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese el presupuesto';
-                            }
-                            if (double.tryParse(value) == null) {
-                              return 'Por favor ingrese un número válido';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
+                  child: BudgetForm(
+                    typeNotifier: typeNotifier,
+                    formKey: _formKey,
                   ),
                 ),
               ),
-              const SizedBox(
-                  height: 20), // Añadir espacio entre el formulario y el botón
+              const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Crear la nueva categoría y agregarla a la lista
-                      var tipo = _controller.types
-                          .firstWhere((tipo) => tipo.name == _selectedTipo);
-                      /*var newCategory = Categoria(
-                        id: DateTime.now().millisecondsSinceEpoch,
-                        name: _nombreCategoria,
-                        tipo: tipo,
-                        presupuesto: _presupuesto,
-                      );
-                      _controller.addCategory(newCategory);
-*/
-                      Navigator.pop(context);
+                      budgetController
+                          .createBudget(
+                              amount: budgetController.presupuesto.value,
+                              year: yearNotifier.value,
+                              month_id: monthNotifier.value,
+                              category_name:
+                                  categoryController.name_category.value,
+                              type_id: typeNotifier.value)
+                          .then((_) {
+                        Navigator.pop(context,
+                            true); // Devuelve true si se creó una nueva categoría
+                      }).catchError((error) {
+                        print("Error creating budget: $error");
+                        Get.snackbar('Error', 'Failed to create budget');
+                      });
                     }
                   },
                   child: Text('Listo', style: TextStyle(fontSize: 20)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(
-                        255, 0, 20, 60), // Cambiado a backgroundColor
-                    foregroundColor: Colors.white, // Cambiado a foregroundColor
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 64,
-                        vertical: 16), // Aumentar tamaño del botón
+                    backgroundColor: Color.fromARGB(255, 0, 20, 60),
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 64, vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -191,4 +124,3 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
     );
   }
 }
-*/

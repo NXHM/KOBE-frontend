@@ -9,12 +9,14 @@ class MonthController extends GetxController {
   var months = <Month>[].obs;
   AuthController authController = Get.put(AuthController());
   RxInt id_selected = 1.obs;
+  RxInt year_selected = 2024.obs;
+  var years = [2024, 2025, 2026];
 
   @override
   void onInit() {
     super.onInit();
+    ResetValues();
     fetchMonths();
-    id_selected.value = 1;
   }
 
   Future<void> fetchMonths() async {
@@ -29,5 +31,10 @@ class MonthController extends GetxController {
     } else {
       Get.snackbar('Error', 'No se pudieron cargar los meses');
     }
+  }
+
+  void ResetValues() {
+    id_selected.value = DateTime.now().month;
+    year_selected.value = DateTime.now().year;
   }
 }
