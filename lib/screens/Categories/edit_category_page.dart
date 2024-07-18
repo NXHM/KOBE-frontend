@@ -1,11 +1,11 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'category_controller.dart';
-import 'package:myapp/screens/Overview/components/period_selector.dart';
-import '../../entities/Category.dart';
+import 'package:myapp/controllers/budget_controller.dart';
+import 'package:myapp/screens/components/periodCategory.dart';
+import 'package:myapp/screens/components/budgetEditForm.dart';
 
 class EditCategoryPage extends StatefulWidget {
-  final Category categoria;
+  final Map<String, dynamic> categoria;
 
   EditCategoryPage({required this.categoria});
 
@@ -14,33 +14,36 @@ class EditCategoryPage extends StatefulWidget {
 }
 
 class _EditCategoryPageState extends State<EditCategoryPage> {
-  int day = DateTime.now().day;
-  int month = DateTime.now().month;
-  int year = DateTime.now().year;
-
-  final CategoryController _controller = Get.put(CategoryController());
+  final ValueNotifier<int> monthNotifier =
+      ValueNotifier<int>(DateTime.now().month);
+  final ValueNotifier<int> yearNotifier =
+      ValueNotifier<int>(DateTime.now().year);
+  final BudgetController budgetController = Get.put(BudgetController());
   final _formKey = GlobalKey<FormState>();
-  late String _selectedTipo;
-  late String _nombreCategoria;
-  late double _presupuesto;
 
   @override
   void initState() {
     super.initState();
-
-    _nombreCategoria = widget.categoria.name;
+    _fetchBudget();
+    monthNotifier.addListener(_fetchBudget);
+    yearNotifier.addListener(_fetchBudget);
   }
 
-  void changeMonth(int m) {
-    setState(() {
-      month = m;
-    });
+  void _fetchBudget() {
+    budgetController.fetchBudget(
+      categoryId: widget.categoria['id'],
+      monthId: monthNotifier.value,
+      year: yearNotifier.value,
+    );
   }
 
-  void changeYear(int y) {
-    setState(() {
-      year = y;
-    });
+  @override
+  void dispose() {
+    monthNotifier.removeListener(_fetchBudget);
+    yearNotifier.removeListener(_fetchBudget);
+    monthNotifier.dispose();
+    yearNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,13 +72,9 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              PeriodSelector(
-                day: day,
-                month: month,
-                year: year,
-                showPercentages: true,
-                changeMonth: changeMonth,
-                changeYear: changeYear,
+              PeriodCategory(
+                monthNotifier: monthNotifier,
+                yearNotifier: yearNotifier,
               ),
               const SizedBox(height: 16),
               Card(
@@ -85,77 +84,10 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                 color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Tipo de Movimiento'),
-                        const SizedBox(height: 5),
-                        DropdownButtonFormField<String>(
-                          value: _selectedTipo,
-                          onChanged: null, // Disable changes
-                          items: ['Ingreso', 'Gasto', 'Ahorro']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Nombre de Categoría'),
-                        const SizedBox(height: 5),
-                        TextFormField(
-                          initialValue: _nombreCategoria,
-                          decoration: InputDecoration(
-                            hintText: 'Ej. Transporte',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          onChanged: (value) {
-                            _nombreCategoria = value;
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese el nombre de la categoría';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Presupuesto (mensual)'),
-                        const SizedBox(height: 5),
-                        TextFormField(
-                          initialValue: _presupuesto.toString(),
-                          decoration: InputDecoration(
-                            hintText: 'Ej. 100',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            _presupuesto = double.tryParse(value) ?? 0;
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor ingrese el presupuesto';
-                            }
-                            if (double.tryParse(value) == null) {
-                              return 'Por favor ingrese un número válido';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
+                  child: BudgetEditForm(
+                    category: widget.categoria,
+                    formKey: _formKey,
+                    budgetController: budgetController,
                   ),
                 ),
               ),
@@ -163,22 +95,23 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Editar la categoría existente
-                    var tipo = _controller.types
-                        .firstWhere((tipo) => tipo.name == _selectedTipo);
-                    /*var editedCategory = Categoria(
-                        id: widget.categoria.id, name: _nombreCategoria);
-                    _controller.updateCategory(editedCategory);*/
-
-                    Navigator.pop(context);
+                    budgetController
+                        .updateBudget(
+                            id: budgetController.idBudget.value,
+                            amount: budgetController.presupuesto.value)
+                        .then((_) {
+                      Navigator.pop(context, true);
+                    }).catchError((error) {
+                      print("Error updating budget: $error");
+                      Get.snackbar('Error', 'Failed to update budget');
+                    });
                   }
                 },
-                child: Text('Listo', style: TextStyle(fontSize: 20)),
+                child: Text('Guardar Cambios', style: TextStyle(fontSize: 20)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 0, 20, 60),
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 64, vertical: 16), // Agrandar el botón
+                  padding: EdgeInsets.symmetric(horizontal: 64, vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -191,4 +124,3 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
     );
   }
 }
-*/

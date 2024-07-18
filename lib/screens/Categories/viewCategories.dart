@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:myapp/controllers/category_controller.dart';
 import 'package:myapp/screens/Home/home_page.dart';
 import 'create_category_page.dart';
-import 'edit_category_page.dart'; // Importa la nueva página
+import 'edit_category_page.dart';
+import '../../entities/Category.dart';
 
 class ViewCategoriesPage extends StatefulWidget {
   @override
@@ -16,8 +17,17 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
   @override
   void initState() {
     super.initState();
-    categoryController
-        .fetchTiposCategorias(); // Llama al controlador para obtener los datos
+    categoryController.fetchTiposCategorias();
+  }
+
+  Future<void> _navigateToCreateCategoryPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CreateCategoryPage()),
+    );
+    if (result == true) {
+      categoryController.fetchTiposCategorias();
+    }
   }
 
   @override
@@ -46,30 +56,21 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateCategoryPage()),
-                );
-              },
+              onPressed: _navigateToCreateCategoryPage,
               child: Text(
                 'Crear Nueva Categoría',
-                style: TextStyle(
-                    fontSize: 18), // Aumentar tamaño del texto del botón
+                style: TextStyle(fontSize: 18),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(
-                    255, 0, 20, 60), // Cambiado a backgroundColor
-                foregroundColor: Colors.white, // Cambiado a foregroundColor
-                padding: EdgeInsets.symmetric(
-                    horizontal: 24, vertical: 16), // Aumentar tamaño del botón
+                backgroundColor: Color.fromARGB(255, 0, 20, 60),
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
-            SizedBox(
-                height: 16), // Añadir separación entre el botón y las tarjetas
+            SizedBox(height: 16),
             Expanded(
               child: Obx(() {
                 if (categoryController.groupedCategory.isEmpty) {
@@ -85,8 +86,7 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        color: Colors
-                            .white, // Asegurar que el fondo de las tarjetas es blanco
+                        color: Colors.white,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -110,12 +110,19 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
                                       children: [
                                         IconButton(
                                           icon: Icon(Icons.edit),
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            int categoryId = categoria['id'];
+                                            await categoryController
+                                                .fetchCategoriaById(categoryId);
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    HomePage(),
+                                                    EditCategoryPage(
+                                                        categoria:
+                                                            categoryController
+                                                                .selectedCategoryData
+                                                                .value),
                                               ),
                                             );
                                           },
@@ -123,8 +130,7 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
                                         IconButton(
                                           icon: Icon(Icons.delete),
                                           onPressed: () {
-                                            int categoryId = categoria[
-                                                'id']; // Obtener el ID de la categoría
+                                            int categoryId = categoria['id'];
                                             categoryController
                                                 .deleteCategory(categoryId);
                                           },
@@ -182,11 +188,8 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
         ],
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
-        currentIndex: 1, // Selecciona el índice adecuado según la navegación
+        currentIndex: 1,
         onTap: (index) {
-          // Maneja la navegación al tocar los íconos del BottomNavigationBar
-          // Dependiendo del index, navega a la página correspondiente
-          // Ejemplo:
           switch (index) {
             case 0:
               Navigator.popUntil(context, ModalRoute.withName('/'));

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/screens/Categories/viewCategories.dart';
-import 'package:myapp/screens/Home/home_page.dart';
 import 'package:myapp/screens/components/category_square.dart';
 import 'package:myapp/screens/components/periodCategory.dart';
 import 'package:myapp/controllers/budget_controller.dart'; // Importar BudgetController
-// Importa la página ViewCategoriesPage
 
 class BudgetCategories extends StatefulWidget {
   @override
@@ -22,21 +20,24 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
   @override
   void initState() {
     super.initState();
-    monthNotifier.addListener(() {
-      budgetController
-          .fetchGroupedBudgets(); // Actualiza los presupuestos cuando cambie el mes
-    });
-    yearNotifier.addListener(() {
-      budgetController
-          .fetchGroupedBudgets(); // Actualiza los presupuestos cuando cambie el mes
-    });
-    budgetController
-        .fetchGroupedBudgets(); // Llama al controlador con el mes inicial
+    monthNotifier.addListener(_fetchGroupedBudgets);
+    yearNotifier.addListener(_fetchGroupedBudgets);
+    _fetchGroupedBudgets(); // Llama al controlador con el mes inicial
+  }
+
+  void _fetchGroupedBudgets() {
+    budgetController.fetchGroupedBudgets(
+      monthId: monthNotifier.value,
+      year: yearNotifier.value,
+    );
   }
 
   @override
   void dispose() {
+    monthNotifier.removeListener(_fetchGroupedBudgets);
+    yearNotifier.removeListener(_fetchGroupedBudgets);
     monthNotifier.dispose();
+    yearNotifier.dispose();
     super.dispose();
   }
 
@@ -64,7 +65,7 @@ class _BudgetCategoriesState extends State<BudgetCategories> {
                         builder: (context) => ViewCategoriesPage()),
                   ).then((_) {
                     // Esto se ejecuta cuando volvemos de la página de edición
-                    budgetController.fetchGroupedBudgets(); // Refrescar datos
+                    _fetchGroupedBudgets(); // Refrescar datos
                   });
                 },
               ),
