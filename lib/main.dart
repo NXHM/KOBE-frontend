@@ -5,7 +5,6 @@ import 'package:myapp/screens/Home/home_page.dart';
 import 'package:myapp/screens/signin/enterCode.dart';
 import 'package:myapp/screens/signin/succesfulChangePassword.dart';
 import 'package:myapp/screens/welcome.dart';
-import 'package:myapp/screens/signin/login.dart';
 import 'package:myapp/screens/signin/signIn.dart';
 import 'package:myapp/screens/signin/successfulRegistration.dart';
 import 'package:myapp/screens/signin/forgetPassword.dart';
@@ -14,6 +13,12 @@ import 'package:myapp/screens/signin/signUp.dart';
 import 'package:myapp/screens/signin/passwordChanged.dart';
 import 'package:myapp/controllers/authController.dart'; // Asegúrate de crear este archivo
 import 'package:myapp/screens/Home/homeSessioned.dart';
+import 'package:myapp/screens/profile/profile.dart';
+import 'package:myapp/screens/profile/edit_profile.dart';
+import 'package:myapp/screens/profile/change_email.dart';
+import 'package:myapp/screens/profile/change_email_confirmation.dart';
+import 'package:myapp/screens/profile/change_password.dart';
+import 'package:myapp/screens/profile/change_password_confirmation.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +53,16 @@ class MyApp extends StatelessWidget {
         //GetPage(name: '/welcome', page: () => Welcome()),
         //GetPage(name: '/newPassword', page: () => NewPassword()),
         //GetPage(name: '/passwordChanged', page: () => PasswordChanged()),
+        GetPage(name: '/profile', page: () => Profile()),
+        GetPage(name: '/profile/edit', page: () => EditProfile()),
+        GetPage(name: '/profile/change_email', page: () => ChangeEmail()),
+        GetPage(
+            name: '/profile/change_email/confirmation',
+            page: () => ChangeEmailConfirmation()),
+        GetPage(name: '/profile/change_password', page: () => ChangePassword()),
+        GetPage(
+            name: '/profile/change_password/confirmation',
+            page: () => ChangePasswordConfirmation()),
       ],
     );
   }
@@ -64,7 +79,7 @@ class AuthWrapper extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data != null && snapshot.data!.isNotEmpty) {                
+              if (snapshot.data != null && snapshot.data!.isNotEmpty) {
                 return HomePageSessioned();
               } else {
                 return SignIn();

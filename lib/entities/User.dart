@@ -7,7 +7,7 @@ class User {
   String name;
   String username;
   String email;
-  String password;
+  String? password;
 
   // Relationships
   List<Movement>? movements;
@@ -19,7 +19,7 @@ class User {
     required this.name,
     required this.username,
     required this.email,
-    required this.password,
+    this.password,
     this.movements,
     this.categories,
     this.budgets,
@@ -31,7 +31,7 @@ class User {
       name: json['name'] as String,
       username: json['username'] as String,
       email: json['email'] as String,
-      password: json['password'] as String,
+      password: json['password'] as String?,
     );
   }
 

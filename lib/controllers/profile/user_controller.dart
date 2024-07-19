@@ -11,7 +11,7 @@ class UserController {
           Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/getUser');
       final headers = {
         'Authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1MzM3OSwiZXhwIjoxNzIxMzU2OTc5fQ.U6BLv_nak0pVHrgRLtv8MF9uJ2FoaWSaCiWKERW2XoY'
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1NDU3NywiZXhwIjoxNzIxMzU4MTc3fQ.lqLUpn8q3QdCvW4r3AQ_ye6QwmQvtOXLc4aN9YDHuEU'
       };
       final response = await http.get(uri, headers: headers);
 
@@ -37,7 +37,7 @@ class UserController {
       };
       final headers = {
         'Authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1MzM3OSwiZXhwIjoxNzIxMzU2OTc5fQ.U6BLv_nak0pVHrgRLtv8MF9uJ2FoaWSaCiWKERW2XoY'
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1NDU3NywiZXhwIjoxNzIxMzU4MTc3fQ.lqLUpn8q3QdCvW4r3AQ_ye6QwmQvtOXLc4aN9YDHuEU'
       };
       final response = await http.put(uri, body: body, headers: headers);
 
@@ -60,7 +60,7 @@ class UserController {
       };
       final headers = {
         'Authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1MzM3OSwiZXhwIjoxNzIxMzU2OTc5fQ.U6BLv_nak0pVHrgRLtv8MF9uJ2FoaWSaCiWKERW2XoY'
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1NDU3NywiZXhwIjoxNzIxMzU4MTc3fQ.lqLUpn8q3QdCvW4r3AQ_ye6QwmQvtOXLc4aN9YDHuEU'
       };
       final response = await http.put(uri, body: body, headers: headers);
 
