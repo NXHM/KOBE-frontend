@@ -8,7 +8,7 @@ class EnterCodeController extends GetxController {
   Future<void> validateCode(String email, String verificationCode) async {
     // Coloco por siaca el email empty
     if (email.isNotEmpty && verificationCode.isNotEmpty) {
-      const url = 'http://localhost:3000/api/validateCode';
+      const url = 'https://02ff-38-25-15-113.ngrok-free.app/api/validateCode';
       try {
         final response = await http.post(
           Uri.parse(url),
