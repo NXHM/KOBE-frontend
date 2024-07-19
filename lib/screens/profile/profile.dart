@@ -14,14 +14,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEBEDF0),
-      appBar: AppBar(
-        title: const Text(
-          'Perfil',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
       body: Container(
         padding: const EdgeInsets.all(30),
         child: SingleChildScrollView(
@@ -133,9 +125,28 @@ class _ProfileState extends State<Profile> {
                           child: const Text('Cambiar correo electrónico'),
                         ),
                       ),
-                      // # Botón Cerrar sesión
+                      // # Botón Cambiar contraseña
                       Container(
                         margin: const EdgeInsets.only(top: 40),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF002060),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            minimumSize: const Size(double.infinity, 45),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, '/profile/change_password');
+                          },
+                          child: const Text('Cambiar contraseña'),
+                        ),
+                      ),
+                      // # Botón Cerrar sesión
+                      Container(
+                        margin: const EdgeInsets.only(top: 11),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFC62B30),
@@ -154,25 +165,6 @@ class _ProfileState extends State<Profile> {
                             );
                           },
                           child: const Text('Cerrar sesión'),
-                        ),
-                      ),
-                      // # Botón Cambiar contraseña
-                      Container(
-                        margin: const EdgeInsets.only(top: 11),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF002060),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            minimumSize: const Size(double.infinity, 45),
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, '/profile/change_password');
-                          },
-                          child: const Text('Cambiar contraseña'),
                         ),
                       ),
                     ],
