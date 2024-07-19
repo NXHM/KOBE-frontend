@@ -107,7 +107,9 @@ class _ChangeEmailState extends State<ChangeEmail> {
               margin: const EdgeInsets.only(bottom: 31),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF002060),
+                  backgroundColor: validEmail
+                      ? const Color(0xFF002060)
+                      : const Color(0XFFBFC0C3),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -115,12 +117,14 @@ class _ChangeEmailState extends State<ChangeEmail> {
                   minimumSize: const Size(double.infinity, 45),
                 ),
                 onPressed: () {
-                  UserController().putEmail(_emailFieldController.text);
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/profile/change_email/confirmation',
-                    (Route<dynamic> route) => false,
-                  );
+                  if (validEmail) {
+                    UserController().putEmail(_emailFieldController.text);
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/profile/change_email/confirmation',
+                      (Route<dynamic> route) => false,
+                    );
+                  }
                 },
                 child: const Text('Cambiar correo'),
               ),
