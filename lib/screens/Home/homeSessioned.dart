@@ -6,6 +6,7 @@ import 'package:myapp/screens/Overview/overview_page.dart';
 import 'package:myapp/screens/IngresarMovimientos/ingresar_movimientos_page.dart';
 import 'package:myapp/screens/Categories/budgetCategories.dart';
 import 'package:myapp/screens/Historial/historial_page.dart';
+import 'package:myapp/screens/Historial/historial_controller.dart';
 
 class HomePageSessioned extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _HomePageState extends State<HomePageSessioned> {
   bool showPercentages = true;
   String? token;
   final AuthController authController = Get.find<AuthController>();
+  final HistorialController historialController =
+      Get.put(HistorialController());
 
   static const List<String> _titles = <String>[
     "Resumen",
@@ -73,7 +76,7 @@ class _HomePageState extends State<HomePageSessioned> {
       case 2:
         return ingresar_movimientos_page();
       case 3:
-        return BudgetCategories();
+        return HistorialPage();
       case 4:
         return overviewPage(
           showPercentages: showPercentages,
