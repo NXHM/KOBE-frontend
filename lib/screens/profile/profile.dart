@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/controllers/profile/fetch_user_controller.dart';
+import 'package:myapp/entities/User.dart';
+import 'package:myapp/controllers/profile/user_controller.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -9,14 +10,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  Future<User?>? user;
-
-  void fetchUser() {
-    setState(() {
-      user = UserDataController().fetchUser();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,135 +25,153 @@ class _ProfileState extends State<Profile> {
       body: Container(
         padding: const EdgeInsets.all(30),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // # Contenedor Nombre Usuario
-              Container(
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  children: [
-                    // ## Fila Nombre
-                    Row(
-                      children: [
-                        const Text(
-                          'Nombre',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+          child: FutureBuilder<User>(
+              future: UserController().getUser(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return Column(
+                    children: [
+                      // # Contenedor Nombre Usuario
+                      Container(
+                        padding: const EdgeInsets.all(22),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        Container(
-                            margin: const EdgeInsets.only(left: 27),
-                            child: const Text('Jose Valdivia')),
-                      ],
-                    ),
-                    // ## Fila Usuario
-                    Container(
-                      margin: const EdgeInsets.only(top: 19),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Usuario',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        child: Column(
+                          children: [
+                            // ## Fila Nombre
+                            Row(
+                              children: [
+                                const Text(
+                                  'Nombre',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 27),
+                                  child: Text(snapshot.data!.name!),
+                                ),
+                              ],
+                            ),
+                            // ## Fila Usuario
+                            Container(
+                              margin: const EdgeInsets.only(top: 19),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Usuario',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 28),
+                                    child: Text(snapshot.data!.username!),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // # Botón Editar perfil
+                      Container(
+                        margin: const EdgeInsets.only(top: 24),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF002060),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            minimumSize: const Size(double.infinity, 45),
                           ),
-                          Container(
-                              margin: const EdgeInsets.only(left: 28),
-                              child: const Text('pepe')),
-                        ],
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/profile/edit');
+                          },
+                          child: const Text('Editar perfil'),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              // # Botón Editar perfil
-              Container(
-                margin: const EdgeInsets.only(top: 24),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF002060),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                      // # Contenedor Correo
+                      Container(
+                        margin: const EdgeInsets.only(top: 30),
+                        padding: const EdgeInsets.all(22),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Correo',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 34),
+                              child: Text(snapshot.data!.email!),
+                            ),
+                          ],
+                        ),
                       ),
-                      minimumSize: const Size(double.infinity, 45)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/profile/edit');
-                  },
-                  child: const Text('Editar perfil'),
-                ),
-              ),
-              // # Contenedor Correo
-              Container(
-                margin: const EdgeInsets.only(top: 30),
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Correo',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                        margin: const EdgeInsets.only(left: 34),
-                        child: const Text('pepe@ulima.edu.com')),
-                  ],
-                ),
-              ),
-              // # Botón Cambiar correo electrónico
-              Container(
-                margin: const EdgeInsets.only(top: 24),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF002060),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                      // # Botón Cambiar correo electrónico
+                      Container(
+                        margin: const EdgeInsets.only(top: 24),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF002060),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            minimumSize: const Size(double.infinity, 45),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, '/profile/change_email');
+                          },
+                          child: const Text('Cambiar correo electrónico'),
+                        ),
                       ),
-                      minimumSize: const Size(double.infinity, 45)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/profile/change_email');
-                  },
-                  child: const Text('Cambiar correo electrónico'),
-                ),
-              ),
-              // # Botón Cerrar sesión
-              Container(
-                margin: const EdgeInsets.only(top: 40),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC62B30),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                      // # Botón Cerrar sesión
+                      Container(
+                        margin: const EdgeInsets.only(top: 40),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFC62B30),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            minimumSize: const Size(double.infinity, 45),
+                          ),
+                          onPressed: () {},
+                          child: const Text('Cerrar sesión'),
+                        ),
                       ),
-                      minimumSize: const Size(double.infinity, 45)),
-                  onPressed: () {},
-                  child: const Text('Cerrar sesión'),
-                ),
-              ),
-              // # Botón Cambiar contraseña
-              Container(
-                margin: const EdgeInsets.only(top: 11),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF002060),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                      // # Botón Cambiar contraseña
+                      Container(
+                        margin: const EdgeInsets.only(top: 11),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF002060),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            minimumSize: const Size(double.infinity, 45),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, '/profile/change_password');
+                          },
+                          child: const Text('Cambiar contraseña'),
+                        ),
                       ),
-                      minimumSize: const Size(double.infinity, 45)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/profile/change_password');
-                  },
-                  child: const Text('Cambiar contraseña'),
-                ),
-              ),
-            ],
-          ),
+                    ],
+                  );
+                }
+              }),
         ),
       ),
     );

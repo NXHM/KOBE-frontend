@@ -16,7 +16,7 @@ import 'package:myapp/screens/profile/change_password_confirmation.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignIn(),
+      home:  Profile(),
       routes: {
         '/signin': (context) => SignIn(),
         '/forgetPassword': (context) => ForgetPassword(),
