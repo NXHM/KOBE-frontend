@@ -74,36 +74,52 @@ class SignIn extends StatelessWidget {
   }
 
   Widget _inputField(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 10.0),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.person),
-                labelText: 'Nombre de Usuario',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16.0),
+    bool obscurePassword = true;
+
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return Container(
+          margin: const EdgeInsets.only(top: 10.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: TextField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.person),
+                    labelText: 'Nombre de Usuario',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          TextField(
-            controller: _passwordController,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.lock),
-              labelText: 'Contraseña',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.0),
+              TextField(
+                controller: _passwordController,
+                obscureText: obscurePassword,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.lock),
+                  labelText: 'Contraseña',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscurePassword = !obscurePassword;
+                      });
+                    },
+                  ),
+                ),
               ),
-            ),
-            obscureText: true,
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -169,7 +185,7 @@ class SignIn extends StatelessWidget {
             },
             child: const Text(
               '¿Ha olvidado su contraseña?',
-              style: TextStyle(color: TDColors.blueLogo),
+              style: TextStyle(color: Colors.grey),
             ),
           ),
         ),
@@ -180,12 +196,22 @@ class SignIn extends StatelessWidget {
               Navigator.pushReplacement(context,
                   MaterialPageRoute<void>(builder: (context) => SignUp()));
             },
-            child: const Text(
-              '¿No tienes una cuenta? Regístrate',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Colors.black,
+            child: RichText(
+              text: const TextSpan(
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+                children: [
+                  TextSpan(
+                    text: '¿No tienes una cuenta? ',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  TextSpan(
+                    text: 'Regístrate',
+                    style: TextStyle(color: TDColors.blueLogo),
+                  ),
+                ],
               ),
             ),
           ),

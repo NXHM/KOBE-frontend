@@ -54,36 +54,62 @@ class NewPassword extends StatelessWidget {
       ),
     );
   }
+Widget _inputFieldsPassword(BuildContext context) {
+  bool obscureNewPassword = true;
+  bool obscureConfirmPassword = true;
 
-  Widget _inputFieldsPassword(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: _newPasswordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.lock),
-            labelText: 'Nueva Contraseña',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
+      return Column(
+        children: [
+          TextField(
+            controller: _newPasswordController,
+            obscureText: obscureNewPassword,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.lock),
+              labelText: 'Nueva Contraseña',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  obscureNewPassword ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () {
+                  setState(() {
+                    obscureNewPassword = !obscureNewPassword;
+                  });
+                },
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-        TextField(
-          controller: _newRepeatPasswordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.lock),
-            labelText: 'Confirmar Contraseña',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _newRepeatPasswordController,
+            obscureText: obscureConfirmPassword,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.lock),
+              labelText: 'Confirmar Contraseña',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () {
+                  setState(() {
+                    obscureConfirmPassword = !obscureConfirmPassword;
+                  });
+                },
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
+    },
+  );
+}
 
   Widget _submitButton(BuildContext context) {
     return SizedBox(
