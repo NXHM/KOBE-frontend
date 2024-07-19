@@ -138,10 +138,8 @@ class SignIn extends StatelessWidget {
               // Guardar el token JWT
               await authController.setToken(result.token!);
               // Navegar a la página de inicio
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute<void>(
-                      builder: (context) => HomePageSessioned()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute<void>(builder: (context) => HomePage()));
             } else {
               Get.snackbar('Error', result.message);
             }

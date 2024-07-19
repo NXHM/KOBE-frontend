@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/constants/icons.dart';
 import 'package:myapp/controllers/profile/user_controller.dart';
 
 class ChangeEmail extends StatefulWidget {
@@ -17,6 +18,12 @@ class _ChangeEmailState extends State<ChangeEmail> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: IconButton(
+          icon: TDIcons.backArrow,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: Colors.white,
       ),
       body: Container(

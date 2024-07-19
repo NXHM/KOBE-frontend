@@ -47,7 +47,7 @@ class ChangePasswordConfirmation extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    '/profile',
+                    '/home',
                     (Route<dynamic> route) => false,
                   );
                 },
