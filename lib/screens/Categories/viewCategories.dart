@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/controllers/category_controller.dart';
-import 'package:myapp/screens/Home/home_page.dart';
 import 'create_category_page.dart';
 import 'edit_category_page.dart';
-import '../../entities/Category.dart';
 
 class ViewCategoriesPage extends StatefulWidget {
   @override
@@ -151,64 +149,6 @@ class _ViewCategoriesPageState extends State<ViewCategoriesPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedFontSize: 0,
-        iconSize: 30,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: "Resumen",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_list_outlined),
-            activeIcon: Icon(Icons.view_list),
-            label: "Presupuestos",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle,
-                size: 72, color: Color.fromARGB(255, 0, 20, 60)),
-            label: "Ingresar Movimientos",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.text_snippet_outlined),
-            activeIcon: Icon(Icons.text_snippet),
-            label: "Historial",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_outlined),
-            activeIcon: Icon(Icons.person_outline),
-            label: "Perfil",
-          ),
-        ],
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 1,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.popUntil(context, ModalRoute.withName('/'));
-              break;
-            case 1:
-              Navigator.popUntil(
-                  context, ModalRoute.withName('/budgetCategories'));
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/ingresar_movimientos');
-              break;
-            case 3:
-              Navigator.pushNamed(context, '/historial');
-              break;
-            case 4:
-              Navigator.pushNamed(context, '/perfil');
-              break;
-          }
-        },
       ),
     );
   }

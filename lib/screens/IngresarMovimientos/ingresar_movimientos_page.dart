@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +27,8 @@ class MyApp extends StatelessWidget {
 
 class ingresar_movimientos_page extends StatefulWidget {
   @override
-  _ingresar_movimientos_pageState createState() => _ingresar_movimientos_pageState();
+  _ingresar_movimientos_pageState createState() =>
+      _ingresar_movimientos_pageState();
 }
 
 class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
@@ -39,264 +38,274 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
   double? _amount;
   String? _comment;
 
-  final ingresar_movimientos_controller _controller = Get.put(ingresar_movimientos_controller());
+  final ingresar_movimientos_controller _controller =
+      Get.put(ingresar_movimientos_controller());
 
-@override
-Widget build(BuildContext context) {
-  return SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Card(
-          color: Colors.white,
-          elevation: 2,
-          margin: EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Fecha'),
-                  SizedBox(height: 5),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'Ingrese la fecha',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.calendar_today),
-                        onPressed: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2101),
-                            builder: (context, child) {
-                              return Theme(
-                                data: ThemeData.light().copyWith(
-                                  colorScheme: ColorScheme.light(
-                                    primary: Color.fromARGB(255, 0, 20, 60),
-                                    onPrimary: Colors.white,
-                                    surface: Colors.white,
-                                    onSurface: Colors.black,
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Card(
+            color: Colors.white,
+            elevation: 2,
+            margin: EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 10, left: 20, right: 20, bottom: 20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text('Fecha'),
+                    SizedBox(height: 5),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Ingrese la fecha',
+                        alignLabelWithHint: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          onPressed: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                              builder: (context, child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    colorScheme: ColorScheme.light(
+                                      primary: Color.fromARGB(255, 0, 20, 60),
+                                      onPrimary: Colors.white,
+                                      surface: Colors.white,
+                                      onSurface: Colors.black,
+                                    ),
+                                    dialogBackgroundColor: Colors.white,
                                   ),
-                                  dialogBackgroundColor: Colors.white,
-                                ),
-                                child: child!,
-                              );
-                            },
-                          );
-                          if (pickedDate != null) {
-                            setState(() {
-                              _selectedDate = pickedDate;
-                            });
-                          }
-                        },
+                                  child: child!,
+                                );
+                              },
+                            );
+                            if (pickedDate != null) {
+                              setState(() {
+                                _selectedDate = pickedDate;
+                              });
+                            }
+                          },
+                        ),
                       ),
+                      readOnly: true,
+                      controller: TextEditingController(
+                        text: _selectedDate != null
+                            ? _selectedDate.toString()
+                            : '',
+                      ),
+                      validator: (value) {
+                        if (_selectedDate == null) {
+                          return 'Por favor seleccione una fecha';
+                        }
+                        return null;
+                      },
                     ),
-                    readOnly: true,
-                    controller: TextEditingController(
-                      text: _selectedDate != null ? _selectedDate.toString() : '',
-                    ),
-                    validator: (value) {
-                      if (_selectedDate == null) {
-                        return 'Por favor seleccione una fecha';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  Text('Tipo'),
-                  SizedBox(height: 5),
-                  Obx(() => DropdownButtonFormField<Type>(
+                    SizedBox(height: 10),
+                    Text('Tipo'),
+                    SizedBox(height: 5),
+                    Obx(() => DropdownButtonFormField<Type>(
+                          decoration: InputDecoration(
+                            hintText: 'Ingrese el tipo',
+                            alignLabelWithHint: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          value: _controller.selectedTipo.value,
+                          onChanged: (newValue) {
+                            _controller.setSelectedTipo(newValue);
+                            _controller.fetchCategorias();
+                            _selectedCategory =
+                                null; // Reiniciar categoría al cambiar el tipo
+                          },
+                          items: _controller.tipos.map((Type tipo) {
+                            return DropdownMenuItem<Type>(
+                              value: tipo,
+                              child: Text(tipo.name),
+                            );
+                          }).toList(),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Por favor seleccione un tipo';
+                            }
+                            return null;
+                          },
+                        )),
+                    SizedBox(height: 10),
+                    Text('Categoría'),
+                    SizedBox(height: 5),
+                    Obx(() {
+                      return DropdownButtonFormField<cat.Category>(
                         decoration: InputDecoration(
-                          hintText: 'Ingrese el tipo',
+                          hintText: 'Ingrese la categoría',
                           alignLabelWithHint: true,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
-                        value: _controller.selectedTipo.value,
+                        value: _selectedCategory,
                         onChanged: (newValue) {
-                          _controller.setSelectedTipo(newValue);
-                          _controller.fetchCategorias();
-                          _selectedCategory = null; // Reiniciar categoría al cambiar el tipo
+                          setState(() {
+                            _selectedCategory = newValue;
+                          });
                         },
-                        items: _controller.tipos.map((Type tipo) {
-                          return DropdownMenuItem<Type>(
-                            value: tipo,
-                            child: Text(tipo.name),
+                        items: _controller.categorias
+                            .where((categoria) =>
+                                categoria.typeId ==
+                                _controller.selectedTipo.value!.id)
+                            .map((cat.Category categoria) {
+                          return DropdownMenuItem<cat.Category>(
+                            value: categoria,
+                            child: Text(categoria.name),
                           );
                         }).toList(),
                         validator: (value) {
                           if (value == null) {
-                            return 'Por favor seleccione un tipo';
+                            return 'Por favor seleccione una categoría';
                           }
                           return null;
                         },
-                      )),
-                  SizedBox(height: 10),
-                  Text('Categoría'),
-                  SizedBox(height: 5),
-                  Obx(() {
-                    return DropdownButtonFormField<cat.Category>(
+                      );
+                    }),
+                    SizedBox(height: 10),
+                    Text('Monto'),
+                    SizedBox(height: 5),
+                    TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'Ingrese la categoría',
+                        hintText: 'Ingrese la cantidad',
                         alignLabelWithHint: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      value: _selectedCategory,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedCategory = newValue;
-                        });
+                      keyboardType: TextInputType.number,
+                      onSaved: (value) {
+                        _amount = double.tryParse(value ?? '');
                       },
-                      items: _controller.categorias
-                          .where((categoria) => categoria.typeId == _controller.selectedTipo.value!.id)
-                          .map((cat.Category categoria) {
-                        return DropdownMenuItem<cat.Category>(
-                          value: categoria,
-                          child: Text(categoria.name),
-                        );
-                      }).toList(),
                       validator: (value) {
-                        if (value == null) {
-                          return 'Por favor seleccione una categoría';
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor ingrese una cantidad';
                         }
                         return null;
                       },
-                    );
-                  }),
-                  SizedBox(height: 10),
-                  Text('Monto'),
-                  SizedBox(height: 5),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'Ingrese la cantidad',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
                     ),
-                    keyboardType: TextInputType.number,
-                    onSaved: (value) {
-                      _amount = double.tryParse(value ?? '');
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor ingrese una cantidad';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  Text('Comentario'),
-                  SizedBox(height: 5),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'Ingrese comentario (opcional)',
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                    SizedBox(height: 10),
+                    Text('Comentario'),
+                    SizedBox(height: 5),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Ingrese comentario (opcional)',
+                        alignLabelWithHint: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
                       ),
+                      maxLines: 5,
+                      onSaved: (value) {
+                        _comment = value;
+                      },
                     ),
-                    maxLines: 5,
-                    onSaved: (value) {
-                      _comment = value;
-                    },
-                  ),
-                  SizedBox(height: 10),
-                ],
+                    SizedBox(height: 10),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    // Implementar aquí cualquier lógica adicional antes de enviar el movimiento
-                    // No se realiza la llamada al servidor aquí, solo validación y guardado de datos
-                  }
-                },
-                child: SizedBox(
-                  width: 125,
-                  height: 50,
-                  child: Center(
-                    child: Text('Siguiente', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      // Implementar aquí cualquier lógica adicional antes de enviar el movimiento
+                      // No se realiza la llamada al servidor aquí, solo validación y guardado de datos
+                    }
+                  },
+                  child: SizedBox(
+                    width: 125,
+                    height: 50,
+                    child: Center(
+                      child: Text('Siguiente',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Color.fromARGB(255, 0, 20, 60),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Color.fromARGB(255, 0, 20, 60),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    print("Ingresa accion");
-                    // Crear objeto Movimiento con los datos del formulario
-                    Movement nuevoMovimiento = Movement(
-                      id: 0, // Esto se asignará en el servidor
-                      date: _selectedDate!,
-                      category: _selectedCategory,
-                      amount: _amount!,
-                      detail: _comment ?? ''
-                    );
-                    print("Objeto creado");
-                    print(nuevoMovimiento);
-                    // Enviar el movimiento al servidor
-                    await _controller.ingresarMovimiento(nuevoMovimiento);
-                       // Mostrar un Snackbar indicando que se añadió el movimiento
-                    Get.snackbar('Éxito', 'Movimiento ingresado correctamente');
-                
-                    // Reiniciar los campos del formulario
-                    _formKey.currentState!.reset();
-                    setState(() {
-                      _selectedDate = null;
-                      _selectedCategory = null;
-                      _amount = null;
-                      _comment = null;
-                    });
-                    print("Movimiento enviado");
-                  }
-                },
-                child: SizedBox(
-                  width: 125,
-                  height: 50,
-                  child: Center(
-                    child: Text('Listo', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 0, 20, 60),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      print("Ingresa accion");
+                      // Crear objeto Movimiento con los datos del formulario
+                      Movement nuevoMovimiento = Movement(
+                          id: 0, // Esto se asignará en el servidor
+                          date: _selectedDate!,
+                          category: _selectedCategory,
+                          amount: _amount!,
+                          detail: _comment ?? '');
+                      print("Objeto creado");
+                      print(nuevoMovimiento);
+                      // Enviar el movimiento al servidor
+                      await _controller.ingresarMovimiento(nuevoMovimiento);
+                      // Mostrar un Snackbar indicando que se añadió el movimiento
+                      Get.snackbar(
+                          'Éxito', 'Movimiento ingresado correctamente');
 
+                      // Reiniciar los campos del formulario
+                      _formKey.currentState!.reset();
+                      setState(() {
+                        _selectedDate = null;
+                        _selectedCategory = null;
+                        _amount = null;
+                        _comment = null;
+                      });
+                      print("Movimiento enviado");
+                    }
+                  },
+                  child: SizedBox(
+                    width: 125,
+                    height: 50,
+                    child: Center(
+                      child: Text('Listo',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 0, 20, 60),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
