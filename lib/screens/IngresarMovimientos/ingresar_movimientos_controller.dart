@@ -1,14 +1,15 @@
-/*import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:myapp/controllers/authController.dart';
 import '../../entities/Type.dart';
-import '../../entities/Category.dart';
+import '../../entities/Category.dart' as cat;
 import '../../entities/Movement.dart';
 
 class ingresar_movimientos_controller extends GetxController {
   Rx<Type?> selectedTipo = Rx<Type?>(null);
   RxList<Type> tipos = <Type>[].obs;
-  RxList<Category> categorias = <Category>[].obs;
+  RxList<cat.Category> categorias = <cat.Category>[].obs;
 
   @override
   void onInit() {
@@ -28,33 +29,60 @@ class ingresar_movimientos_controller extends GetxController {
   }
 
   Future<void> fetchCategorias() async {
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:3000/api/categoria'));
+    AuthController authController = AuthController();
+    var token = await authController.getToken();
+
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/api/categoria'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token!
+      },
+      body: null
+    );
+
     if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
-      categorias.value =
-          jsonResponse.map((item) => adaptarCategoria(item)).toList();
+      var jsonResponse = json.decode(response.body);
+      if (jsonResponse is Map<String, dynamic>) {
+        // Extraer y combinar las listas de categorías
+        List<cat.Category> combinedCategories = [];
+
+        combinedCategories.addAll(_parseCategories(jsonResponse['Ingreso']));
+        combinedCategories.addAll(_parseCategories(jsonResponse['Gasto']));
+        combinedCategories.addAll(_parseCategories(jsonResponse['Ahorro']));
+
+        // Asignar la lista combinada a la variable de categorías
+        categorias.value = combinedCategories;
+
+        print(categorias);
+      } else {
+        Get.snackbar('Error', 'Formato de respuesta no esperado');
+      }
     } else {
       Get.snackbar('Error', 'No se pudieron cargar las categorías');
     }
   }
 
-  Category adaptarCategoria(Map<String, dynamic> json) {
-    print("json");
-    print(json);
+  List<cat.Category> _parseCategories(dynamic categoryList) {
+    if (categoryList is List) {
+      return categoryList.map((item) => cat.Category.fromJson(item as Map<String, dynamic>)).toList();
+    }
+    return [];
+  }
+
+  cat.Category adaptarCategoria(Map<String, dynamic> json) {
     int id = json['id'];
     String name = json['name'];
-    int tipoId = json['type_id']; // Usar tipo_id del JSON recibido
-    double presupuesto = 1; // Asegurar que presupuesto sea un double
+    int typeId = json['type_id']; // Usar tipo_id del JSON recibido
 
     // Buscar el Tipo correspondiente en la lista tipos
-    Type? tipo = tipos.firstWhereOrNull((tipo) => tipo.id == tipoId);
+    Type? tipo = tipos.firstWhereOrNull((tipo) => tipo.id == typeId);
 
     if (tipo == null) {
-      throw Exception('No se encontró el tipo con id $tipoId');
+      throw Exception('No se encontró el tipo con id $typeId');
     }
 
-    return Category(id: id, name: name, type: tipo);
+    return cat.Category(id: id, name: name, typeId: typeId);
   }
 
   void setSelectedTipo(Type? newValue) {
@@ -62,6 +90,9 @@ class ingresar_movimientos_controller extends GetxController {
   }
 
   Future<void> ingresarMovimiento(Movement movimiento) async {
+    AuthController authController = AuthController();
+    var token = await authController.getToken();
+
     print("Ingresa a controlador movimiento");
     final url = Uri.parse('http://10.0.2.2:3000/api/ingresarMovimiento');
 
@@ -69,8 +100,8 @@ class ingresar_movimientos_controller extends GetxController {
       'amount': movimiento.amount.toDouble(),
       'detail': movimiento.detail,
       'date': movimiento.date.toIso8601String(),
-      'user_id': movimiento.user.id,
-      'category_id': movimiento.category.id,
+      'user_id': movimiento.user?.id,
+      'category_id': movimiento.category?.id,
     });
 
     print("BODY");
@@ -78,7 +109,7 @@ class ingresar_movimientos_controller extends GetxController {
 
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json', 'Authorization': token!},
       body: body,
     );
 
@@ -105,4 +136,3 @@ class ingresar_movimientos_controller extends GetxController {
     }
   }
 }
-*/

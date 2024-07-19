@@ -1,10 +1,12 @@
-/*import 'package:flutter/foundation.dart';
+import 'dart:ffi';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/entities/models.dart';
 import 'ingresar_movimientos_controller.dart';
 import '../../entities/Type.dart';
-import '../../entities/Category.dart';
+import '../../entities/Category.dart' as cat;
 import '../../entities/Movement.dart';
 import '../../entities/User.dart';
 
@@ -33,8 +35,7 @@ class ingresar_movimientos_page extends StatefulWidget {
 class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
   final _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
-  Type? _selectedType;
-  C _selectedCategory;
+  cat.Category? _selectedCategory;
   double? _amount;
   String? _comment;
 
@@ -122,6 +123,7 @@ Widget build(BuildContext context) {
                         value: _controller.selectedTipo.value,
                         onChanged: (newValue) {
                           _controller.setSelectedTipo(newValue);
+                          _controller.fetchCategorias();
                           _selectedCategory = null; // Reiniciar categoría al cambiar el tipo
                         },
                         items: _controller.tipos.map((Type tipo) {
@@ -141,7 +143,7 @@ Widget build(BuildContext context) {
                   Text('Categoría'),
                   SizedBox(height: 5),
                   Obx(() {
-                    return DropdownButtonFormField<Category>(
+                    return DropdownButtonFormField<cat.Category>(
                       decoration: InputDecoration(
                         hintText: 'Ingrese la categoría',
                         alignLabelWithHint: true,
@@ -156,9 +158,9 @@ Widget build(BuildContext context) {
                         });
                       },
                       items: _controller.categorias
-                          .where((categoria) => categoria.tipo.id == _controller.selectedTipo.value?.id)
-                          .map((Categoria categoria) {
-                        return DropdownMenuItem<Categoria>(
+                          .where((categoria) => categoria.typeId == _controller.selectedTipo.value!.id)
+                          .map((cat.Category categoria) {
+                        return DropdownMenuItem<cat.Category>(
                           value: categoria,
                           child: Text(categoria.name),
                         );
@@ -249,14 +251,12 @@ Widget build(BuildContext context) {
                     _formKey.currentState!.save();
                     print("Ingresa accion");
                     // Crear objeto Movimiento con los datos del formulario
-                    Movimiento nuevoMovimiento = Movimiento(
+                    Movement nuevoMovimiento = Movement(
                       id: 0, // Esto se asignará en el servidor
-                      fecha: _selectedDate!,
-                      tipo: _controller.selectedTipo.value!,
-                      categoria: _selectedCategory!,
-                      monto: _amount!,
-                      comentario: _comment ?? '',
-                      usuario: User(id: 5, name: 'Flavio'), // Aquí deberías obtener el usuario actual
+                      date: _selectedDate!,
+                      category: _selectedCategory,
+                      amount: _amount!,
+                      detail: _comment ?? ''
                     );
                     print("Objeto creado");
                     print(nuevoMovimiento);
@@ -269,7 +269,6 @@ Widget build(BuildContext context) {
                     _formKey.currentState!.reset();
                     setState(() {
                       _selectedDate = null;
-                      _selectedType = null;
                       _selectedCategory = null;
                       _amount = null;
                       _comment = null;
@@ -301,4 +300,3 @@ Widget build(BuildContext context) {
 }
 
 }
-*/

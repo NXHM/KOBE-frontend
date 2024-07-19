@@ -7,7 +7,7 @@ class Category {
   int? id;
   String name;
   int typeId;
-  int userId;
+  int? userId;
 
   // Relationships
   Type? type;
@@ -19,7 +19,7 @@ class Category {
     this.id,
     required this.name,
     required this.typeId,
-    required this.userId,
+    this.userId,
     this.type,
     this.user,
     this.movements,

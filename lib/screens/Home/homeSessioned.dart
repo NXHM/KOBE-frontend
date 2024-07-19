@@ -66,20 +66,23 @@ class _HomePageState extends State<HomePageSessioned> {
       case 0:
         return overviewPage(
           showPercentages: showPercentages,
+          onPressed: _onItemTapped,
         );
       case 1:
         return BudgetCategories();
       case 2:
-        return BudgetCategories();
+        return ingresar_movimientos_page();
       case 3:
         return BudgetCategories();
       case 4:
         return overviewPage(
           showPercentages: showPercentages,
+          onPressed: _onItemTapped,
         );
       default:
         return overviewPage(
           showPercentages: showPercentages,
+          onPressed: _onItemTapped,
         );
     }
   }
