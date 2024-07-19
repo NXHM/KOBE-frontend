@@ -1,4 +1,5 @@
 import 'Category.dart';
+
 class Type {
   int? id;
   String name;
@@ -13,16 +14,24 @@ class Type {
   });
 
   factory Type.fromJson(Map<String, dynamic> json) {
+    Iterable categories = [];
+    if (json["Category"] != null) {
+      categories = json["Category"];
+    }
     return Type(
-      id: json['id'] as int?,
-      name: json['name'] as String,
-    );
+        id: json['id'] as int?,
+        name: json['name'] as String,
+        categories: categories.isEmpty
+            ? []
+            : List<Category>.from(
+                categories.map((model) => Category.fromJson(model))));
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
+      'categories': categories,
     };
   }
 }

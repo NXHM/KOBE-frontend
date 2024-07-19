@@ -28,11 +28,19 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
-      id: json['id'] as int?,
-      name: json['name'] as String,
-      typeId: json['type_id'] as int,
-      userId: json['user_id'] as int,
-    );
+        id: json['id'] as int?,
+        name: json['name'] as String,
+        typeId: json['type_id'] as int,
+        userId: json['user_id'] as int,
+        type: json["Type"] != null ? Type.fromJson(json["Type"]) : null);
+  }
+
+  factory Category.fromJson2(Map<String, dynamic> json) {
+    return Category(
+        id: json['id'] as int?,
+        name: json['name'] as String,
+        typeId: json['type_id'] as int,
+        userId: json['user_id'] as int);
   }
 
   Map<String, dynamic> toJson() {
@@ -41,6 +49,12 @@ class Category {
       'name': name,
       'type_id': typeId,
       'user_id': userId,
+      "Type": type,
     };
+  }
+
+  @override
+  String toString() {
+    return 'Category{id: $id, name: $name}';
   }
 }

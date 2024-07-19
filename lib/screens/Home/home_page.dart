@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return BudgetCategories();
       case 3:
-        return BudgetCategories();
+        return HistorialPage();
       case 4:
         return overviewPage(
           showPercentages: showPercentages,
