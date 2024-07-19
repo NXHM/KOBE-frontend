@@ -118,13 +118,13 @@ class SignUp extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 50),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (_nameController.text.isNotEmpty &&
               _usernameController.text.isNotEmpty &&
               _emailController.text.isNotEmpty &&
               _passwordController.text.isNotEmpty &&
               _repeatPasswordController.text.isNotEmpty) {
-            signUpController.createUser(
+            await signUpController.createUser(
               _nameController.text,
               _usernameController.text,
               _emailController.text,

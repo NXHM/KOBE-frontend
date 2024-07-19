@@ -145,7 +145,14 @@ class _ProfileState extends State<Profile> {
                             ),
                             minimumSize: const Size(double.infinity, 45),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            UserController().logoutUser();
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/signin',
+                              (Route<dynamic> route) => false,
+                            );
+                          },
                           child: const Text('Cerrar sesión'),
                         ),
                       ),
