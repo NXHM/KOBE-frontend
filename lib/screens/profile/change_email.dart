@@ -10,7 +10,14 @@ class ChangeEmail extends StatefulWidget {
 }
 
 class _ChangeEmailState extends State<ChangeEmail> {
-  final _emailController = TextEditingController();
+  final _emailFieldController = TextEditingController();
+  bool validEmail = false;
+
+  void validateEmail() {
+    setState(() {
+      validEmail = RegExp(r'^.+@.+\..+$').hasMatch(_emailFieldController.text);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +58,10 @@ class _ChangeEmailState extends State<ChangeEmail> {
             Container(
               margin: const EdgeInsets.only(top: 68),
               child: TextField(
-                controller: _emailController,
+                controller: _emailFieldController,
+                onChanged: (value) {
+                  validateEmail();
+                },
                 decoration: InputDecoration(
                   hintText: 'Nuevo correo electrónico',
                   hintStyle: const TextStyle(color: Color(0XFF9299A3)),
@@ -74,6 +84,23 @@ class _ChangeEmailState extends State<ChangeEmail> {
                 ),
               ),
             ),
+            const SizedBox(height: 27),
+            // # Email validations
+            Row(
+              children: [
+                Icon(
+                  Icons.check_circle_outline,
+                  color: validEmail ? Colors.blue : const Color(0XFF9BA1A8),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Correo electrónico válido.',
+                  style: TextStyle(
+                    color: validEmail ? Colors.blue : const Color(0XFF9BA1A8),
+                  ),
+                ),
+              ],
+            ),
             const Spacer(),
             // # Botón Cambiar correo
             Container(
@@ -88,7 +115,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                   minimumSize: const Size(double.infinity, 45),
                 ),
                 onPressed: () {
-                  UserController().putEmail(_emailController.text);
+                  UserController().putEmail(_emailFieldController.text);
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/profile/change_email/confirmation',

@@ -41,9 +41,14 @@ class _ProfileState extends State<Profile> {
                                   'Nombre',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Container(
-                                  margin: const EdgeInsets.only(left: 27),
-                                  child: Text(snapshot.data!.name!),
+                                Flexible(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(left: 26),
+                                    child: Text(
+                                      snapshot.data!.name,
+                                      softWrap: true,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -57,9 +62,14 @@ class _ProfileState extends State<Profile> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 28),
-                                    child: Text(snapshot.data!.username!),
+                                  Flexible(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(left: 28),
+                                      child: Text(
+                                        snapshot.data!.username,
+                                        softWrap: true,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -99,9 +109,14 @@ class _ProfileState extends State<Profile> {
                               'Correo',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 34),
-                              child: Text(snapshot.data!.email!),
+                            Flexible(
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 34),
+                                child: Text(
+                                  snapshot.data!.email,
+                                  softWrap: true,
+                                ),
+                              ),
                             ),
                           ],
                         ),
