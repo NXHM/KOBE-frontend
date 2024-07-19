@@ -7,6 +7,7 @@ import 'package:myapp/screens/IngresarMovimientos/ingresar_movimientos_page.dart
 import 'package:myapp/screens/Categories/budgetCategories.dart';
 import 'package:myapp/screens/Historial/historial_page.dart';
 import 'package:myapp/screens/Historial/historial_controller.dart';
+import 'package:myapp/screens/profile/profile.dart';
 
 class HomePageSessioned extends StatefulWidget {
   @override
@@ -78,10 +79,7 @@ class _HomePageState extends State<HomePageSessioned> {
       case 3:
         return HistorialPage();
       case 4:
-        return overviewPage(
-          showPercentages: showPercentages,
-          onPressed: _onItemTapped,
-        );
+        return Profile();
       default:
         return overviewPage(
           showPercentages: showPercentages,

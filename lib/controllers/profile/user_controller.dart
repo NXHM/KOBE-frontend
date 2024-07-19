@@ -3,16 +3,32 @@
 import 'package:myapp/entities/User.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:myapp/controllers/authController.dart';
+import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+late String authority;
+
+Future<void> initializeEnv() async {
+  await dotenv.load(fileName: ".env");
+  authority = dotenv.env['AUTHORITY'] ?? '';
+}
 
 class UserController {
+  UserController() {
+    initializeEnv();
+  }
+
   Future<User> getUser() async {
     try {
-      final uri =
-          Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/getUser');
-      final headers = {
-        'Authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1NDU3NywiZXhwIjoxNzIxMzU4MTc3fQ.lqLUpn8q3QdCvW4r3AQ_ye6QwmQvtOXLc4aN9YDHuEU'
-      };
+      AuthController authController = Get.find<AuthController>();
+      final token = await authController.getToken();
+      Map<String, String> headers = {};
+      if (token != null) {
+        headers = {'Authorization': token};
+      }
+
+      final uri = Uri.https(authority, 'api/getUser');
       final response = await http.get(uri, headers: headers);
 
       if (response.statusCode == 200) {
@@ -29,15 +45,17 @@ class UserController {
 
   void putUser(String name, String username) async {
     try {
-      final uri =
-          Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/putUser');
+      AuthController authController = Get.find<AuthController>();
+      final token = await authController.getToken();
+      Map<String, String> headers = {};
+      if (token != null) {
+        headers = {'Authorization': token};
+      }
+
+      final uri = Uri.https(authority, 'api/putUser');
       final body = {
         'name': name,
         'username': username,
-      };
-      final headers = {
-        'Authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1NDU3NywiZXhwIjoxNzIxMzU4MTc3fQ.lqLUpn8q3QdCvW4r3AQ_ye6QwmQvtOXLc4aN9YDHuEU'
       };
       final response = await http.put(uri, body: body, headers: headers);
 
@@ -53,14 +71,16 @@ class UserController {
 
   void putEmail(String email) async {
     try {
-      final uri =
-          Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/putEmail');
+      AuthController authController = Get.find<AuthController>();
+      final token = await authController.getToken();
+      Map<String, String> headers = {};
+      if (token != null) {
+        headers = {'Authorization': token};
+      }
+
+      final uri = Uri.https(authority, 'api/putEmail');
       final body = {
         'email': email,
-      };
-      final headers = {
-        'Authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthbWlvbmVzIiwiaWQiOjEsImlhdCI6MTcyMTM1NDU3NywiZXhwIjoxNzIxMzU4MTc3fQ.lqLUpn8q3QdCvW4r3AQ_ye6QwmQvtOXLc4aN9YDHuEU'
       };
       final response = await http.put(uri, body: body, headers: headers);
 
@@ -72,5 +92,35 @@ class UserController {
     } catch (error) {
       print('Error putting user: $error');
     }
+  }
+
+  void putPassword(String password) async {
+    try {
+      AuthController authController = Get.find<AuthController>();
+      final token = await authController.getToken();
+      Map<String, String> headers = {};
+      if (token != null) {
+        headers = {'Authorization': token};
+      }
+
+      final uri = Uri.https(authority, 'api/putPassword');
+      final body = {
+        'password': password,
+      };
+      final response = await http.put(uri, body: body, headers: headers);
+
+      if (response.statusCode == 200) {
+        print('User put successfully.');
+      } else {
+        print('Failed to put user: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error putting user: $error');
+    }
+  }
+
+  void logoutUser() async {
+    AuthController authController = Get.find<AuthController>();
+    authController.deleteToken();
   }
 }

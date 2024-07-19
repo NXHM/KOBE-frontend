@@ -4,6 +4,7 @@ import 'package:myapp/screens/Overview/overview_page.dart';
 import 'package:myapp/screens/IngresarMovimientos/ingresar_movimientos_page.dart';
 import 'package:myapp/screens/Categories/budgetCategories.dart';
 import 'package:myapp/screens/Historial/historial_page.dart';
+import 'package:myapp/screens/profile/profile.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,10 +43,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         return HistorialPage();
       case 4:
-        return overviewPage(
-          showPercentages: showPercentages,
-          onPressed: _onItemTapped,
-        );
+        return Profile();
       default:
         return overviewPage(
           showPercentages: showPercentages,
@@ -167,7 +165,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         color: Color(0xFFEBEDF0),
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(child: _buildBody()),
+        child: _buildBody(),
       ),
       bottomNavigationBar: _bottomNavigation(),
     );

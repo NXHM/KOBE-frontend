@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/entities/User.dart';
 import 'package:myapp/controllers/profile/user_controller.dart';
+import 'package:myapp/constants/icons.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -19,6 +20,12 @@ class _EditProfileState extends State<EditProfile> {
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFEBEDF0),
       appBar: AppBar(
+        leading: IconButton(
+          icon: TDIcons.backArrow,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text(
           'Perfil',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -116,7 +123,7 @@ class _EditProfileState extends State<EditProfile> {
                           );
                           Navigator.pushNamedAndRemoveUntil(
                             context,
-                            '/profile',
+                            '/home',
                             (Route<dynamic> route) => false,
                           );
                         },

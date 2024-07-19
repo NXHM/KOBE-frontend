@@ -94,37 +94,58 @@ class SignUp extends StatelessWidget {
   }
 
   Widget _buildTextField(
-      TextEditingController controller, String label, IconData icon,
-      {bool isPassword = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon),
-          labelText: label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.0),
+    TextEditingController controller,
+    String label,
+    IconData icon, {
+  bool isPassword = false,
+}) {
+  bool _obscureText = isPassword;
+
+  return StatefulBuilder(
+    builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon),
+            labelText: label,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            suffixIcon: isPassword
+                ? IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )
+                : null,
           ),
+          obscureText: _obscureText,
+          enableSuggestions: false,
+          autocorrect: false,
         ),
-        obscureText: isPassword,
-        enableSuggestions: !isPassword,
-        autocorrect: !isPassword,
-      ),
-    );
-  }
+      );
+    },
+  );
+}
 
   Widget _button(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 50),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (_nameController.text.isNotEmpty &&
               _usernameController.text.isNotEmpty &&
               _emailController.text.isNotEmpty &&
               _passwordController.text.isNotEmpty &&
               _repeatPasswordController.text.isNotEmpty) {
-            signUpController.createUser(
+            await signUpController.createUser(
               _nameController.text,
               _usernameController.text,
               _emailController.text,
