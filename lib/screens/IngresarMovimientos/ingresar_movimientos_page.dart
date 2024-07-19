@@ -34,7 +34,6 @@ class ingresar_movimientos_page extends StatefulWidget {
 class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
   final _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
-  cat.Category? _selectedCategory;
   double? _amount;
   String? _comment;
 
@@ -102,7 +101,7 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                       readOnly: true,
                       controller: TextEditingController(
                         text: _selectedDate != null
-                            ? _selectedDate.toString()
+                            ? _selectedDate.toString().split(' ')[0]
                             : '',
                       ),
                       validator: (value) {
@@ -127,8 +126,6 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                           onChanged: (newValue) {
                             _controller.setSelectedTipo(newValue);
                             _controller.fetchCategorias();
-                            _selectedCategory =
-                                null; // Reiniciar categoría al cambiar el tipo
                           },
                           items: _controller.tipos.map((Type tipo) {
                             return DropdownMenuItem<Type>(
@@ -147,37 +144,41 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                     Text('Categoría'),
                     SizedBox(height: 5),
                     Obx(() {
-                      return DropdownButtonFormField<cat.Category>(
-                        decoration: InputDecoration(
-                          hintText: 'Ingrese la categoría',
-                          alignLabelWithHint: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        value: _selectedCategory,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedCategory = newValue;
-                          });
-                        },
-                        items: _controller.categorias
-                            .where((categoria) =>
-                                categoria.typeId ==
-                                _controller.selectedTipo.value!.id)
-                            .map((cat.Category categoria) {
-                          return DropdownMenuItem<cat.Category>(
-                            value: categoria,
-                            child: Text(categoria.name),
-                          );
-                        }).toList(),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Por favor seleccione una categoría';
-                          }
-                          return null;
-                        },
-                      );
+                      List<cat.Category> filteredCategories = _controller
+                          .categorias
+                          .where((categoria) =>
+                              categoria.typeId ==
+                              _controller.selectedTipo.value?.id)
+                          .toList();
+
+                      return filteredCategories.isEmpty
+                          ? Text('No hay categorías disponibles para este tipo')
+                          : DropdownButtonFormField<cat.Category>(
+                              decoration: InputDecoration(
+                                hintText: 'Ingrese la categoría',
+                                alignLabelWithHint: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              value: _controller.selectedCategoria.value,
+                              onChanged: (newValue) {
+                                _controller.setSelectedCategoria(newValue);
+                              },
+                              items: filteredCategories
+                                  .map((cat.Category categoria) {
+                                return DropdownMenuItem<cat.Category>(
+                                  value: categoria,
+                                  child: Text(categoria.name),
+                                );
+                              }).toList(),
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Por favor seleccione una categoría';
+                                }
+                                return null;
+                              },
+                            );
                     }),
                     SizedBox(height: 10),
                     Text('Monto'),
@@ -233,7 +234,6 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       // Implementar aquí cualquier lógica adicional antes de enviar el movimiento
-                      // No se realiza la llamada al servidor aquí, solo validación y guardado de datos
                     }
                   },
                   child: SizedBox(
@@ -258,29 +258,25 @@ class _ingresar_movimientos_pageState extends State<ingresar_movimientos_page> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       print("Ingresa accion");
-                      // Crear objeto Movimiento con los datos del formulario
                       Movement nuevoMovimiento = Movement(
-                          id: 0, // Esto se asignará en el servidor
+                          id: 0,
                           date: _selectedDate!,
-                          category: _selectedCategory,
+                          category: _controller.selectedCategoria.value,
                           amount: _amount!,
                           detail: _comment ?? '');
                       print("Objeto creado");
                       print(nuevoMovimiento);
-                      // Enviar el movimiento al servidor
                       await _controller.ingresarMovimiento(nuevoMovimiento);
-                      // Mostrar un Snackbar indicando que se añadió el movimiento
                       Get.snackbar(
                           'Éxito', 'Movimiento ingresado correctamente');
 
-                      // Reiniciar los campos del formulario
                       _formKey.currentState!.reset();
                       setState(() {
                         _selectedDate = null;
-                        _selectedCategory = null;
                         _amount = null;
                         _comment = null;
                       });
+                      _controller.setSelectedCategoria(null);
                       print("Movimiento enviado");
                     }
                   },

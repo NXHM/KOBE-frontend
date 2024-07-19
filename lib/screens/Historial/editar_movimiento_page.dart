@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/entities/Category.dart';
-import 'package:myapp/screens/Home/homeSessioned.dart';
+import 'package:myapp/screens/Home/home_page.dart';
 import 'editar_movimiento_controller.dart';
 
 class EditarMovimientoPage extends StatefulWidget {
@@ -231,10 +231,11 @@ class _EditarMovimientoPageState extends State<EditarMovimientoPage> {
                       _amount!,
                       _comment!,
                     );
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                            builder: (context) => HomePageSessioned()));
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/home',
+                      (Route<dynamic> route) => false,
+                    );
                   }
                 },
                 child: SizedBox(

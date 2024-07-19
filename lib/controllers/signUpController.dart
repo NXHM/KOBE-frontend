@@ -16,7 +16,7 @@ class SignUpController extends GetxController {
         name.isNotEmpty &&
         email.isNotEmpty) {
       const url =
-          'https://02ff-38-25-15-113.ngrok-free.app/api/createUser'; // Reemplaza <ngrok_url> con la URL generada por ngrok
+          'http://localhost:3000/api/createUser'; // Reemplaza <ngrok_url> con la URL generada por ngrok
       final response = await http.post(
         Uri.parse(url),
         headers: {

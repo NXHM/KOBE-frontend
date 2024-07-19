@@ -28,7 +28,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri = Uri.https(authority, 'api/getUser');
+      final uri = Uri.parse('http://localhost:3000/api/getUser');
       final response = await http.get(uri, headers: headers);
 
       if (response.statusCode == 200) {
@@ -52,7 +52,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri = Uri.https(authority, 'api/putUser');
+      final uri = Uri.parse('http://localhost:3000/api/putUser');
       final body = {
         'name': name,
         'username': username,
@@ -78,7 +78,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri = Uri.https(authority, 'api/putEmail');
+      final uri = Uri.parse('http://localhost:3000/api/putEmail');
       final body = {
         'email': email,
       };
@@ -103,7 +103,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri = Uri.https(authority, 'api/putPassword');
+      final uri = Uri.parse('http://localhost:3000/api/putPassword');
       final body = {
         'password': password,
       };

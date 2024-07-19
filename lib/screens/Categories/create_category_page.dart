@@ -98,8 +98,11 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                                   categoryController.name_category.value,
                               type_id: typeNotifier.value)
                           .then((_) {
-                        Navigator.pop(context,
-                            true); // Devuelve true si se creó una nueva categoría
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/home',
+                          (Route<dynamic> route) => false,
+                        ); // Devuelve true si se creó una nueva categoría
                       }).catchError((error) {
                         print("Error creating budget: $error");
                         Get.snackbar('Error', 'Failed to create budget');

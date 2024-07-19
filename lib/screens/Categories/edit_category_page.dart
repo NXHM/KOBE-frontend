@@ -100,7 +100,11 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                             id: budgetController.idBudget.value,
                             amount: budgetController.presupuesto.value)
                         .then((_) {
-                      Navigator.pop(context, true);
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/home',
+                        (Route<dynamic> route) => false,
+                      );
                     }).catchError((error) {
                       print("Error updating budget: $error");
                       Get.snackbar('Error', 'Failed to update budget');

@@ -35,8 +35,7 @@ class _overviewPageState extends State<overviewPage> {
 
   void _fetchBudgetsMovements() {
     controller.fetchMovimientosYPresupuestos(
-      yearNotifier.value, 
-      monthNotifier.value);
+        yearNotifier.value, monthNotifier.value);
     print(controller.data);
   }
 
@@ -46,8 +45,7 @@ class _overviewPageState extends State<overviewPage> {
     monthNotifier.dispose();
     yearNotifier.dispose();
     controller.fetchMovimientosYPresupuestos(
-      DateTime.now().year, 
-      DateTime.now().month);
+        DateTime.now().year, DateTime.now().month);
     super.dispose();
   }
 
@@ -55,54 +53,67 @@ class _overviewPageState extends State<overviewPage> {
   Widget build(BuildContext context) {
     print(controller.data);
     return Padding(
-      padding: const EdgeInsets.all(30),
-      child: SingleChildScrollView(child: 
-        Column(
-          children: [
-            PeriodSelector(day: currentDay, monthNotifier: monthNotifier, yearNotifier: yearNotifier, showPercentages: widget.showPercentages),
-            const SizedBox(height: 16),
-            Container(
-              child: Obx(() {
+        padding: const EdgeInsets.all(30),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              PeriodSelector(
+                  day: currentDay,
+                  monthNotifier: monthNotifier,
+                  yearNotifier: yearNotifier,
+                  showPercentages: widget.showPercentages),
+              const SizedBox(height: 16),
+              Container(child: Obx(() {
                 if (controller.isLoading.value) {
                   return Center(child: CircularProgressIndicator());
                 } else {
                   return Container(
-                    child: 
-                      controller.data[0].isEmpty == true && controller.data[1].isEmpty == true && controller.data[2].isEmpty == true ?
-                        Column(children: [
-                          const SizedBox(height: 50,),
-                          Center(
-                            child: Text("No tienes presupuestos. \nCrea uno",
-                            textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),),),
-                          const SizedBox(height: 10,),
-                          ElevatedButton(
-                            onPressed: () {widget.onPressed(2);},
-                            child: Text('Crear Categoría'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              textStyle: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )
+                      child: controller.data[0].isEmpty == true &&
+                              controller.data[1].isEmpty == true &&
+                              controller.data[2].isEmpty == true
+                          ? Column(
+                              children: [
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                Center(
+                                  child: Text(
+                                    "No tienes presupuestos. \nCrea uno",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      widget.onPressed(2);
+                                    },
+                                    child: Text('Crear Categoría'),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.black,
+                                        textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        )))
+                              ],
                             )
-                          )
-                        ],) 
-                      :
-                        widget.showPercentages == true ? 
-                        OverviewPercentagesPage(data: controller.data,) 
-                        : 
-                        OverviewValuesPage(data: controller.data,)
-                  );
+                          : widget.showPercentages == true
+                              ? OverviewPercentagesPage(
+                                  data: controller.data,
+                                )
+                              : OverviewValuesPage(
+                                  data: controller.data,
+                                ));
                 }
-            }))
-          ],
-        ),
-      )
-    );
+              }))
+            ],
+          ),
+        ));
   }
 }

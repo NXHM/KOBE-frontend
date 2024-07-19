@@ -11,7 +11,7 @@ Future<void> initializeEnv() async {
 }
 
 class BudgetService {
-  BudgetService(){
+  BudgetService() {
     initializeEnv();
   }
 
@@ -20,7 +20,7 @@ class BudgetService {
     AuthController authController = AuthController();
     var token = await authController.getToken();
 
-    final uri = Uri.https(authority, 'api/budgetMovement');
+    final uri = Uri.parse('http://localhost:3000/api/budgetMovement');
     final response = await http.post(
       uri,
       headers: <String, String>{

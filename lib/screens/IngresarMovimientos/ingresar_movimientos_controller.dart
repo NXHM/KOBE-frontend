@@ -22,22 +22,25 @@ class ingresar_movimientos_controller extends GetxController {
   Rx<Type?> selectedTipo = Rx<Type?>(null);
   RxList<Type> tipos = <Type>[].obs;
   RxList<cat.Category> categorias = <cat.Category>[].obs;
+  Rx<cat.Category?> selectedCategoria = Rx<cat.Category?>(null);
 
   @override
   void onInit() {
     super.onInit();
-    fetchTipos();
-    fetchCategorias();
+    fetchTipos().then((_) => fetchCategorias());
   }
 
   Future<void> fetchTipos() async {
     try {
-      final uri = Uri.https(authority, 'api/tipo');
+      final uri = Uri.parse('http://localhost:3000/api/tipo');
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
         tipos.value = jsonResponse.map((item) => Type.fromJson(item)).toList();
+        if (tipos.isNotEmpty) {
+          setSelectedTipo(tipos.first);
+        }
       } else {
         Get.snackbar('Error', 'No se pudieron cargar los tipos');
       }
@@ -51,9 +54,8 @@ class ingresar_movimientos_controller extends GetxController {
     AuthController authController = AuthController();
     var token = await authController.getToken();
 
-    final uri = Uri.https(authority, 'api/categoria');
-    final response = await http.post(
-        uri,
+    final uri = Uri.parse('http://localhost:3000/api/categoria');
+    final response = await http.post(uri,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': token!
@@ -63,15 +65,24 @@ class ingresar_movimientos_controller extends GetxController {
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
       if (jsonResponse is Map<String, dynamic>) {
-        // Extraer y combinar las listas de categorías
         List<cat.Category> combinedCategories = [];
 
         combinedCategories.addAll(_parseCategories(jsonResponse['Ingreso']));
         combinedCategories.addAll(_parseCategories(jsonResponse['Gasto']));
         combinedCategories.addAll(_parseCategories(jsonResponse['Ahorro']));
 
-        // Asignar la lista combinada a la variable de categorías
         categorias.value = combinedCategories;
+
+        // Seleccionar la primera categoría del tipo seleccionado, si existe
+        if (selectedTipo.value != null) {
+          var categoriasDelTipo =
+              categorias.where((c) => c.typeId == selectedTipo.value!.id);
+          if (categoriasDelTipo.isNotEmpty) {
+            setSelectedCategoria(categoriasDelTipo.first);
+          } else {
+            setSelectedCategoria(null);
+          }
+        }
 
         print(categorias);
       } else {
@@ -94,9 +105,8 @@ class ingresar_movimientos_controller extends GetxController {
   cat.Category adaptarCategoria(Map<String, dynamic> json) {
     int id = json['id'];
     String name = json['name'];
-    int typeId = json['type_id']; // Usar tipo_id del JSON recibido
+    int typeId = json['type_id'];
 
-    // Buscar el Tipo correspondiente en la lista tipos
     Type? tipo = tipos.firstWhereOrNull((tipo) => tipo.id == typeId);
 
     if (tipo == null) {
@@ -108,6 +118,12 @@ class ingresar_movimientos_controller extends GetxController {
 
   void setSelectedTipo(Type? newValue) {
     selectedTipo.value = newValue;
+    // Reiniciar la categoría seleccionada cuando se cambia el tipo
+    setSelectedCategoria(null);
+  }
+
+  void setSelectedCategoria(cat.Category? newValue) {
+    selectedCategoria.value = newValue;
   }
 
   Future<void> ingresarMovimiento(Movement movimiento) async {
@@ -115,7 +131,7 @@ class ingresar_movimientos_controller extends GetxController {
     var token = await authController.getToken();
 
     print("Ingresa a controlador movimiento");
-    final uri = Uri.https(authority, 'api/ingresarMovimiento');
+    final uri = Uri.parse('http://localhost:3000/api/ingresarMovimiento');
 
     final body = json.encode({
       'amount': movimiento.amount.toDouble(),
@@ -139,7 +155,6 @@ class ingresar_movimientos_controller extends GetxController {
       Get.snackbar('Éxito', 'Movimiento ingresado correctamente');
       print("Movimiento ingresado correctamente");
     } else {
-      // Intenta obtener un mensaje de error del cuerpo de la respuesta si está disponible
       String errorMessage = 'Hubo un problema al ingresar el movimiento';
       if (response.body.isNotEmpty) {
         try {
