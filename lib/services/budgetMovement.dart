@@ -1,17 +1,28 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/controllers/authController.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+late String authority;
+
+Future<void> initializeEnv() async {
+  await dotenv.load(fileName: ".env");
+  authority = dotenv.env['AUTHORITY'] ?? '';
+}
 
 class BudgetService {
-  static const String _baseUrl = 'http://localhost:3000/api';
+  BudgetService(){
+    initializeEnv();
+  }
 
   Future<List<List<Map<String, dynamic>>>>
       getMovimientosYPresupuestosPorCategoria(int year, int month) async {
     AuthController authController = AuthController();
     var token = await authController.getToken();
 
+    final uri = Uri.https(authority, 'api/budgetMovement');
     final response = await http.post(
-      Uri.parse('$_baseUrl/budgetMovement'),
+      uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': token!

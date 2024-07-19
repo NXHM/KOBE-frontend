@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,7 +7,18 @@ import '../../entities/Type.dart';
 import '../../entities/Category.dart' as cat;
 import '../../entities/Movement.dart';
 
+late String authority;
+
+Future<void> initializeEnv() async {
+  await dotenv.load(fileName: ".env");
+  authority = dotenv.env['AUTHORITY'] ?? '';
+}
+
 class ingresar_movimientos_controller extends GetxController {
+  ingresar_movimientos_controller() {
+    initializeEnv();
+  }
+
   Rx<Type?> selectedTipo = Rx<Type?>(null);
   RxList<Type> tipos = <Type>[].obs;
   RxList<cat.Category> categorias = <cat.Category>[].obs;
@@ -19,12 +31,18 @@ class ingresar_movimientos_controller extends GetxController {
   }
 
   Future<void> fetchTipos() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:3000/api/tipo'));
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
-      tipos.value = jsonResponse.map((item) => Type.fromJson(item)).toList();
-    } else {
+    try {
+      final uri = Uri.https(authority, 'api/tipo');
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        tipos.value = jsonResponse.map((item) => Type.fromJson(item)).toList();
+      } else {
+        Get.snackbar('Error', 'No se pudieron cargar los tipos');
+      }
+    } catch (error) {
+      print('Error fetching types: $error');
       Get.snackbar('Error', 'No se pudieron cargar los tipos');
     }
   }
@@ -33,8 +51,9 @@ class ingresar_movimientos_controller extends GetxController {
     AuthController authController = AuthController();
     var token = await authController.getToken();
 
+    final uri = Uri.https(authority, 'api/categoria');
     final response = await http.post(
-        Uri.parse('http://localhost:3000/api/categoria'),
+        uri,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': token!
@@ -96,7 +115,7 @@ class ingresar_movimientos_controller extends GetxController {
     var token = await authController.getToken();
 
     print("Ingresa a controlador movimiento");
-    final url = Uri.parse('http://localhost:3000/api/ingresarMovimiento');
+    final uri = Uri.https(authority, 'api/ingresarMovimiento');
 
     final body = json.encode({
       'amount': movimiento.amount.toDouble(),
@@ -106,11 +125,8 @@ class ingresar_movimientos_controller extends GetxController {
       'category_id': movimiento.category?.id,
     });
 
-    print("BODY");
-    print(body);
-
     final response = await http.post(
-      url,
+      uri,
       headers: {'Content-Type': 'application/json', 'Authorization': token!},
       body: body,
     );
