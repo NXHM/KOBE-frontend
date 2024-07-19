@@ -33,13 +33,12 @@ class ingresar_movimientos_controller extends GetxController {
     var token = await authController.getToken();
 
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:3000/api/categoria'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': token!
-      },
-      body: null
-    );
+        Uri.parse('http://10.0.2.2:3000/api/categoria'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': token!
+        },
+        body: null);
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
@@ -65,7 +64,9 @@ class ingresar_movimientos_controller extends GetxController {
 
   List<cat.Category> _parseCategories(dynamic categoryList) {
     if (categoryList is List) {
-      return categoryList.map((item) => cat.Category.fromJson(item as Map<String, dynamic>)).toList();
+      return categoryList
+          .map((item) => cat.Category.fromJson(item as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }
@@ -97,9 +98,9 @@ class ingresar_movimientos_controller extends GetxController {
     final url = Uri.parse('http://10.0.2.2:3000/api/ingresarMovimiento');
 
     final body = json.encode({
-      'amount': movimiento.amount.toDouble(),
+      'amount': movimiento.amount?.toDouble(),
       'detail': movimiento.detail,
-      'date': movimiento.date.toIso8601String(),
+      'date': movimiento.date.toString(),
       'user_id': movimiento.user?.id,
       'category_id': movimiento.category?.id,
     });

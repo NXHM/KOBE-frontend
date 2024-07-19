@@ -43,4 +43,9 @@ class Category {
       'user_id': userId,
     };
   }
+
+  @override
+  String toString() {
+    return 'Category{id: $id, name: $name}';
+  }
 }

@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePageSessioned> {
       case 2:
         return ingresar_movimientos_page();
       case 3:
-        return BudgetCategories();
+        return HistorialPage();
       case 4:
         return overviewPage(
           showPercentages: showPercentages,
