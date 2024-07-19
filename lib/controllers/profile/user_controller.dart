@@ -5,8 +5,20 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:myapp/controllers/authController.dart';
 import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+late String authority;
+
+Future<void> initializeEnv() async {
+  await dotenv.load(fileName: ".env");
+  authority = dotenv.env['AUTHORITY'] ?? '';
+}
 
 class UserController {
+  UserController() {
+    initializeEnv();
+  }
+
   Future<User> getUser() async {
     try {
       AuthController authController = Get.find<AuthController>();
@@ -16,8 +28,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri =
-          Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/getUser');
+      final uri = Uri.https(authority, 'api/getUser');
       final response = await http.get(uri, headers: headers);
 
       if (response.statusCode == 200) {
@@ -41,8 +52,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri =
-          Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/putUser');
+      final uri = Uri.https(authority, 'api/putUser');
       final body = {
         'name': name,
         'username': username,
@@ -68,8 +78,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri =
-          Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/putEmail');
+      final uri = Uri.https(authority, 'api/putEmail');
       final body = {
         'email': email,
       };
@@ -94,8 +103,7 @@ class UserController {
         headers = {'Authorization': token};
       }
 
-      final uri =
-          Uri.https('1bc7-191-98-138-140.ngrok-free.app', 'api/putPassword');
+      final uri = Uri.https(authority, 'api/putPassword');
       final body = {
         'password': password,
       };

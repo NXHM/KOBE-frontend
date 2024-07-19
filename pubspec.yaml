@@ -34,6 +34,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   get: ^4.6.5
   flutter_secure_storage: ^8.0.0
+  flutter_dotenv: ^5.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -60,6 +61,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
